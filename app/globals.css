@@ -1,0 +1,324 @@
+@import "tailwindcss";
+
+/*
+  ------------------------------------------------------------------
+  SUBHASH GALLA — PORTFOLIO
+  Design system: "Signal" — a compute graph, dark editorial, spatial.
+
+  Theme lock: DARK ONLY (per brief). One accent: signal amber.
+  Type: Geist (display + text), Geist Mono (data / labels / coordinates).
+  Radius: near-square. Structural = 0, interactive = 4-6px, media = 10px.
+  ------------------------------------------------------------------
+*/
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Surfaces: deep graphite with a faint cool cast ---- */
+  --canvas: #0a0b0d;          /* page ground */
+  --canvas-sunk: #08090a;     /* recessed wells */
+  --surface-1: #101215;       /* raised panels */
+  --surface-2: #16181c;       /* raised on raised */
+  --surface-3: #1d2025;       /* highest */
+
+  /* ---- Hairlines ---- */
+  --line: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.12);
+  --line-faint: rgba(255, 255, 255, 0.04);
+
+  /* ---- Ink ---- */
+  --ink: #f3f4f6;             /* primary text, headlines */
+  --ink-2: #bcc0c7;           /* body */
+  --ink-3: #9297a0;           /* secondary / captions (AA on canvas) */
+  --ink-4: #787e89;           /* faint labels / ordinals (AA on canvas) */
+
+  /* ---- Accent: signal amber (used sparingly, never decoratively) ---- */
+  --signal: #eaa94b;
+  --signal-bright: #f7bd63;
+  --signal-dim: #a97a34;
+  --signal-wash: rgba(234, 169, 75, 0.12);
+  --on-signal: #17130a;
+
+  /* ---- Semantic ---- */
+  --positive: #4ca87e;
+  --danger: #e5674e;
+
+  /* ---- Elevation: offset + soft blur, tinted to the ground ---- */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 8px 24px -8px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-3: 0 32px 64px -16px rgba(0, 0, 0, 0.65), 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+  --shadow-signal: 0 0 0 1px var(--signal-wash), 0 8px 32px -8px rgba(234, 169, 75, 0.25);
+
+  /* ---- Radius ---- */
+  --r-chip: 3px;
+  --r-control: 6px;
+  --r-media: 10px;
+
+  /* ---- Motion ---- */
+  --dur-micro: 140ms;
+  --dur-ui: 240ms;
+  --dur-panel: 420ms;
+  --dur-section: 640ms;
+  --dur-cine: 900ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);      /* expo-ish, primary */
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- Layout ---- */
+  --page-max: 1320px;
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+  --nav-h: 64px;
+
+  /* ---- Z-index scale (documented, do not freelance) ---- */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-nav: 60;
+  --z-overlay: 80;
+  --z-modal: 90;
+  --z-grain: 100;
+  --z-cursor: 110;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-canvas-sunk: var(--canvas-sunk);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-line-faint: var(--line-faint);
+
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+
+  --color-signal: var(--signal);
+  --color-signal-bright: var(--signal-bright);
+  --color-signal-dim: var(--signal-dim);
+  --color-on-signal: var(--on-signal);
+
+  --color-positive: var(--positive);
+  --color-danger: var(--danger);
+
+  --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--ff-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: var(--ff-display), var(--ff-sans), system-ui, sans-serif;
+
+  --radius-chip: var(--r-chip);
+  --radius-control: var(--r-control);
+  --radius-media: var(--r-media);
+
+  --shadow-e1: var(--shadow-1);
+  --shadow-e2: var(--shadow-2);
+  --shadow-e3: var(--shadow-3);
+
+  --ease-out: var(--ease-out);
+  --ease-inout: var(--ease-inout);
+
+  --container-page: var(--page-max);
+}
+
+/* ================================================================
+   BASE
+   ================================================================ */
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+  scroll-behavior: auto; /* smooth-scroll handled by Lenis, JS-gated */
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv01", "cv03";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Headlines: characterful display grotesque, tightly tracked, balanced */
+h1, h2, h3, h4 {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+  line-height: 1.05;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* ---- Browser surfaces: theme everything the OS would otherwise own ---- */
+::selection {
+  background: var(--signal);
+  color: var(--on-signal);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--canvas-sunk);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border: 2px solid var(--canvas-sunk);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2b2f36;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-3) var(--canvas-sunk);
+}
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+input,
+textarea {
+  caret-color: var(--signal);
+}
+
+::placeholder {
+  color: var(--ink-4);
+}
+
+/* Tabular numerals wherever numbers carry meaning */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Mono label: data / coordinate / measurement voice (not decoration) */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+
+/* ---- Reduced motion: collapse everything expressive to instant ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility: the page's editorial content column */
+.wrap {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Skip link: visible only on keyboard focus */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: var(--z-modal);
+  padding: 0.5rem 0.875rem;
+  background: var(--surface-3);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-control);
+  font-size: 0.8125rem;
+  transform: translateY(-160%);
+  transition: transform var(--dur-ui) var(--ease-out);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Hairline that carries a single travelling signal (section breaks) */
+.rule {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  background: var(--line);
+  overflow: hidden;
+}
+.rule::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 22%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--signal) 45%,
+    var(--signal-bright) 50%,
+    var(--signal) 55%,
+    transparent
+  );
+  opacity: 0.55;
+  animation: signal-travel 7s var(--ease-inout) infinite;
+}
+@keyframes signal-travel {
+  0% { transform: translateX(-120%); }
+  55%, 100% { transform: translateX(560%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rule::after { display: none; }
+}
+
+/* Link affordance: underline grows from the leading edge, in signal */
+.link {
+  color: var(--ink);
+  text-decoration: none;
+  background-image: linear-gradient(var(--signal), var(--signal));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
+}
+.link:hover {
+  background-size: 100% 1px;
+}
+
+/* Signal travelling a project's architecture path */
+.diagram-signal {
+  offset-distance: 0%;
+  animation: diagram-flow 3.4s cubic-bezier(0.55, 0, 0.45, 1) infinite;
+}
+@keyframes diagram-flow {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  70% { opacity: 1; }
+  85%, 100% { offset-distance: 100%; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .diagram-signal { display: none; }
+}
+
+/* pause offscreen work: sections marked inert stop their CSS animations */
+[data-paused="true"] .diagram-signal,
+[data-paused="true"] .rule::after {
+  animation-play-state: paused;
+}

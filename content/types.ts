@@ -64,9 +64,17 @@ export type Role = {
 
 export type Education = {
   institution: string;
-  credential: string;
   period: string;
-  detail?: string;
+  /** e.g. "B.S. Computer Science" */
+  degree: string;
+  /** e.g. "Certified Specialization in Artificial Intelligence", or "" */
+  specialization?: string;
+  /** e.g. "GPA 3.7", or "" */
+  gpa?: string;
+  /** e.g. "President's List, Fall 2024 and Spring 2025", or "" */
+  honors?: string;
+  /** ordered as in the transcript, not alphabetical */
+  coursework?: string[];
 };
 
 export type CapabilityGroup = {

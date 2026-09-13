@@ -155,10 +155,19 @@ export const portfolio: Portfolio = {
   education: [
     {
       institution: "University of North Texas",
-      credential: "B.S. Computer Science, Certified Specialization in Artificial Intelligence",
       period: "2022 – 2026",
-      detail:
-        "GPA 3.7. President's List, Fall 2024 and Spring 2025. Coursework in Reinforcement Learning, Machine Learning, Data Science, Data Structures & Algorithms, Operating Systems, and Databases.",
+      degree: "B.S. Computer Science",
+      specialization: "Certified Specialization in Artificial Intelligence",
+      gpa: "GPA 3.7",
+      honors: "President's List, Fall 2024 and Spring 2025",
+      coursework: [
+        "Reinforcement Learning",
+        "Machine Learning",
+        "Data Science",
+        "Data Structures & Algorithms",
+        "Operating Systems",
+        "Databases",
+      ],
     },
   ],
 

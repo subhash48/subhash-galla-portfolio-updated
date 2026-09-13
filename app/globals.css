@@ -301,7 +301,10 @@ input, textarea { caret-color: var(--accent); }
 /* about: an asymmetric editorial pair. The narrative sits low-left, clear of
    the centred close-up face; education answers it from the opposing corner. */
 .beat--about-lead { bottom: clamp(3rem, 12vh, 8.5rem); left: var(--gutter); width: min(28rem, 38vw); }
-.beat--about-edu  { bottom: clamp(2.5rem, 9vh, 6.5rem); right: var(--gutter); left: auto; width: min(20rem, 28vw); }
+/* education reads as a record, not a caption: same --gutter inset as the
+   lead column (one consistent margin system), but wide enough to give the
+   degree line real room. Width is capped well clear of the centred face. */
+.beat--about-edu  { bottom: clamp(3rem, 10vh, 7rem); right: var(--gutter); left: auto; width: min(29rem, 36vw); }
 
 /* ---- scrims: density only where the copy sits, as SIBLINGS of the copy ---- */
 .scrim {
@@ -335,8 +338,8 @@ input, textarea { caret-color: var(--accent); }
   background: radial-gradient(62% 88% at 20% 82%, rgb(var(--film-ground) / 0.86) 0%, rgb(var(--film-ground) / 0.52) 46%, transparent 76%);
 }
 .scrim--about-edu {
-  inset: -14vh -12vw -8vh -8vw;
-  background: radial-gradient(58% 80% at 80% 86%, rgb(var(--film-ground) / 0.8) 0%, rgb(var(--film-ground) / 0.46) 44%, transparent 74%);
+  inset: -20vh -10vw -10vh -16vw;
+  background: radial-gradient(72% 92% at 84% 80%, rgb(var(--film-ground) / 0.94) 0%, rgb(var(--film-ground) / 0.68) 46%, rgb(var(--film-ground) / 0.26) 70%, transparent 88%);
 }
 
 /* ================================================================
@@ -415,14 +418,26 @@ input, textarea { caret-color: var(--accent); }
   transform: scale(calc(0.985 + var(--in, 0) * 0.015)) translate3d(0, calc(var(--out, 0) * -2vh), 0);
   transform-origin: 0 100%;
 }
-/* about B/C: the story and education rise in directly off the frame — no
-   glass beneath them, so the rise is a plain settle, not a panel-lift */
-[data-device="rise"] .about-story,
-[data-device="rise"] .about-edu {
+/* about B: the story rises in directly off the frame — no glass beneath
+   it, so the rise is a plain settle, not a panel-lift */
+[data-device="rise"] .about-story {
   opacity: clamp(0, calc(var(--in, 0) * 1.4 - 0.3), 1);
   transform: translate3d(0, calc((1 - var(--in, 0)) * 3vh + (var(--pos, 0) - 0.5) * 1vh), 0);
 }
 [data-device="rise"] .about-now { opacity: clamp(0, calc(var(--in, 0) * 1.6 - 0.55), 1); }
+/* about C: education settles in on its own — quiet opacity/translateY/blur,
+   never a spin or a slide-across; coursework follows a beat behind it */
+[data-device="rise"] .about-edu {
+  --edu-in: clamp(0, calc(var(--in, 0) * 1.5 - 0.25), 1);
+  opacity: var(--edu-in);
+  filter: blur(calc((1 - var(--edu-in)) * 4px));
+  transform: translate3d(0, calc((1 - var(--edu-in)) * 18px), 0);
+}
+[data-device="rise"] .edu-course {
+  --course-in: clamp(0, calc(var(--in, 0) * 1.7 - 0.55), 1);
+  opacity: var(--course-in);
+  transform: translate3d(0, calc((1 - var(--course-in)) * 10px), 0);
+}
 
 /* contact: the statement settles from scale and holds; links follow */
 [data-device="finale"] .card { transform: scale(calc(1.08 - var(--in, 0) * 0.08)); transform-origin: 50% 100%; }
@@ -465,6 +480,7 @@ input, textarea { caret-color: var(--accent); }
 [data-film="static"] .copy .about-story,
 [data-film="static"] .copy .about-now,
 [data-film="static"] .copy .about-edu,
+[data-film="static"] .copy .edu-course,
 [data-film="static"] .copy .discipline-n,
 [data-film="static"] .copy .discipline-title,
 [data-film="static"] .copy .discipline-blurb,
@@ -676,9 +692,49 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--line-strong);
   color: var(--ink); font-size: var(--t-body); text-shadow: 0 2px 16px rgb(var(--black) / 0.55);
 }
-.about-edu .label { display: block; }
-.about-edu .credential { margin-top: 6px; font-size: var(--t-small); font-weight: 500; color: var(--ink); line-height: 1.4; text-shadow: 0 2px 16px rgb(var(--black) / 0.55); }
-.about-edu .detail { margin-top: 6px; font-size: var(--t-small); color: var(--ink-3); line-height: 1.5; text-shadow: 0 2px 16px rgb(var(--black) / 0.55); }
+
+/* education: a small editorial record with real hierarchy — university,
+   degree, specialization and coursework each get their own weight and
+   rhythm instead of collapsing into one caption-sized paragraph. */
+.about-edu { max-width: min(430px, 100%); }
+.edu-record + .edu-record { margin-top: var(--s-7); }
+.edu-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.edu-inst, .edu-period {
+  font-family: var(--font-mono); font-size: clamp(0.8125rem, 0.95vw, 0.9375rem); /* 13–15px */
+  letter-spacing: 0.1em; text-shadow: 0 2px 16px rgb(var(--black) / 0.6);
+}
+.edu-inst { text-transform: uppercase; color: var(--ink); }
+.edu-period { color: rgb(var(--ivory) / 0.6); font-variant-numeric: tabular-nums; }
+.edu-degree {
+  margin-top: var(--s-4);
+  font-family: var(--font-display); font-weight: 600; font-variation-settings: "wdth" 106;
+  font-size: clamp(1.25rem, 1.7vw, 1.5rem); /* 20–24px */
+  line-height: 1.25; letter-spacing: -0.01em; color: var(--ink);
+  text-shadow: 0 2px 18px rgb(var(--black) / 0.62);
+}
+.edu-spec {
+  margin-top: 8px;
+  font-size: clamp(1.0625rem, 1.25vw, 1.1875rem); /* 17–19px */
+  line-height: 1.4; color: rgb(var(--ivory) / 0.8);
+  text-shadow: 0 2px 16px rgb(var(--black) / 0.58);
+}
+.edu-honors {
+  margin-top: var(--s-4);
+  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem); /* 15–17px */
+  line-height: 1.6; color: rgb(var(--ivory) / 0.68);
+  text-shadow: 0 2px 14px rgb(var(--black) / 0.55);
+}
+.edu-course { margin-top: var(--s-4); }
+.edu-course-label {
+  display: block; margin-bottom: 6px;
+  font-family: var(--font-mono); font-size: var(--t-label);
+  letter-spacing: 0.14em; text-transform: uppercase; color: rgb(var(--ivory) / 0.5);
+}
+.edu-course p {
+  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem); /* 15–17px */
+  line-height: 1.7; color: rgb(var(--ivory) / 0.58);
+  text-shadow: 0 2px 14px rgb(var(--black) / 0.55);
+}
 
 /* contact */
 .contact h2 { font-size: var(--t-title); margin-inline: auto; max-width: 13ch; }
@@ -704,7 +760,7 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   .work-beat .copy { grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem); gap: var(--s-5) var(--s-6); }
   .beat--column { width: min(34rem, 52vw); }
   .beat--about-lead { width: min(24rem, 44vw); }
-  .beat--about-edu { width: min(17rem, 32vw); }
+  .beat--about-edu { width: min(23rem, 46vw); }
 }
 
 /* phones (and the strip composition): every beat sits under the film strip */
@@ -750,6 +806,9 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   .about-statement { max-width: none; }
   .about-lede, .about-story { margin-top: var(--s-4); max-width: none; font-size: var(--t-body); }
   .about-now { margin-top: var(--s-4); padding-top: var(--s-3); }
+  .about-edu { max-width: none; }
+  .edu-degree { margin-top: var(--s-3); }
+  .edu-honors, .edu-course { margin-top: var(--s-3); }
   .contact h2 { margin-inline: 0; }
   .contact-sub { margin-inline: 0; }
   .contact-socials { justify-content: flex-start; gap: 10px 20px; margin-top: var(--s-5); }

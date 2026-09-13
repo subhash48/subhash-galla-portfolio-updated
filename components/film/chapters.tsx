@@ -311,10 +311,22 @@ export function AboutChapter() {
       >
         <div className="about-edu">
           {education.map((e) => (
-            <div key={e.institution}>
-              <span className="label">{e.institution} · {e.period}</span>
-              <p className="credential">{e.credential}</p>
-              {e.detail && <p className="detail">{e.detail}</p>}
+            <div key={e.institution} className="edu-record">
+              <div className="edu-head">
+                <span className="edu-inst">{e.institution}</span>
+                <span className="edu-period">{e.period}</span>
+              </div>
+              <p className="edu-degree">{e.degree}</p>
+              {e.specialization && <p className="edu-spec">{e.specialization}</p>}
+              {(e.gpa || e.honors) && (
+                <p className="edu-honors">{[e.gpa, e.honors].filter(Boolean).join(" · ")}</p>
+              )}
+              {!!e.coursework?.length && (
+                <div className="edu-course">
+                  <span className="edu-course-label">Coursework</span>
+                  <p>{e.coursework.join(" · ")}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>

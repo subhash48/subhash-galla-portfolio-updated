@@ -46,7 +46,7 @@ export function SocialRow({ className }: { className?: string }) {
               {...(external ? { target: "_blank", rel: "me noreferrer" } : {})}
               className="group inline-flex items-center gap-2 text-[0.875rem] text-ink-3 transition-colors duration-[--dur-ui] hover:text-ink"
             >
-              <Ico className="size-4 text-ink-4 transition-colors duration-[--dur-ui] group-hover:text-signal" />
+              <Ico className="size-4 text-ink-4 transition-colors duration-[--dur-ui] group-hover:text-accent" />
               {LABELS[s.kind]}
             </a>
           </li>

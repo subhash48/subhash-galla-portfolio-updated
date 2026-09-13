@@ -6,7 +6,6 @@ import type { Portfolio } from "./types";
     - GitHub / LinkedIn URLs
     - per-project repo / live links
     - resume PDF at /public/subhash-galla-resume.pdf
-    - headshot at /public/subhash-galla.jpg  (1600x1600+, the grey-bg photo)
     - real one-liner + metric for "Operations Review Tracker"
 */
 
@@ -18,7 +17,7 @@ export const portfolio: Portfolio = {
       "I build LLM systems that stay grounded and the full-stack products that put them to work. Retrieval pipelines, natural-language planners, and document AI that beat their baselines on the numbers that matter.",
     location: "Denton, Texas",
     availability: "Open to full-time AI and software engineering roles",
-    photo: "/subhash-galla.jpg", // TODO: add the grey-background headshot at public/subhash-galla.jpg
+    photo: "/portrait.jpg", // headshot at public/portrait.jpg (not currently rendered; the film sequence carries the likeness)
   },
 
   socials: [
@@ -29,22 +28,29 @@ export const portfolio: Portfolio = {
   ],
 
   nav: [
-    { id: "home", label: "Index" },
+    { id: "intro", label: "Index" },
     { id: "work", label: "Work" },
-    { id: "about", label: "About" },
     { id: "experience", label: "Experience" },
+    { id: "about", label: "About" },
     { id: "contact", label: "Contact" },
   ],
 
   hero: {
-    headline: "AI systems that stay {signal}grounded{/signal}.",
-    sub: "AI and software engineer. Retrieval, planning, and document AI, and the full-stack systems that carry them into real use.",
+    lines: ["I build", "the system", "around", "the model."],
+    accent: "",
+    sub: "Retrieval, validation and the interfaces that carry an LLM into real use. Measured against a baseline before it counts as done.",
   },
 
   about: {
+    statement: [
+      "Most language-model",
+      "demos fall apart the",
+      "moment they leave",
+      "the slide.",
+    ],
+    statementAccent: "",
     paragraphs: [
-      "Most language-model demos fall apart the moment they leave the slide. My work is about the opposite: systems that cite their sources, validate their own output, and get measured against a baseline before anyone calls them done.",
-      "That pattern runs through everything I have built. A retrieval-augmented chatbot that answered 25 percent more relevantly than an LLM-only workflow. A natural-language robot planner that went from 62 to 88 percent valid task completion once the output was parsed and checked. A document-AI proof of concept at Westat that reads registration paperwork end to end, from upload to validated fields.",
+      "My work is about the opposite: systems that cite their sources, validate their own output, and get measured against a baseline before anyone calls them done.",
       "I studied computer science with an AI specialization at the University of North Texas, graduating in 2026 on the President's List. Alongside the models I have shipped React Native apps on a Postgres and Prisma backend, mentored intro-CS students, and run stand-ups and retros for a small project team. I like the whole loop: the model, the service around it, and the interface a person actually touches.",
     ],
     now: "Looking for a team building serious LLM or full-stack systems.",
@@ -62,6 +68,7 @@ export const portfolio: Portfolio = {
       timeframe: "2025",
       stack: ["Python", "LangChain", "Hugging Face", "RAG", "Vector search"],
       domains: ["Generative AI", "Retrieval"],
+      kind: "Retrieval / Orchestration",
       links: { repo: "", caseStudy: true }, // TODO repo
       media: null, // architecture diagram, generated
       metrics: [
@@ -79,6 +86,7 @@ export const portfolio: Portfolio = {
       timeframe: "2025",
       stack: ["Python", "LLMs", "JSON schema", "Prompt engineering"],
       domains: ["Agentic AI", "Planning"],
+      kind: "Planning / Validation",
       links: { repo: "", caseStudy: true }, // TODO repo
       media: null,
       metrics: [
@@ -96,6 +104,7 @@ export const portfolio: Portfolio = {
       timeframe: "2024 – 2025",
       stack: ["React Native", "Expo", "PostgreSQL", "Prisma", "TypeScript"],
       domains: ["Full-Stack", "Mobile"],
+      kind: "Full-stack / Mobile",
       links: { repo: "", caseStudy: false }, // TODO repo / live
       media: null,
     },
@@ -110,6 +119,7 @@ export const portfolio: Portfolio = {
       timeframe: "2024",
       stack: ["Excel", "Tableau", "SAP"],
       domains: ["Data"],
+      kind: "Data / Reporting",
       links: {},
       media: null,
     },
@@ -162,44 +172,34 @@ export const portfolio: Portfolio = {
       ],
     },
     {
-      key: "lang",
-      label: "Languages",
-      items: ["Python", "TypeScript", "JavaScript", "Java", "SQL", "C++", "C", "R"],
-    },
-    {
-      key: "fullstack",
-      label: "Full-Stack",
-      items: ["React Native", "Expo", "REST APIs", "HTML / CSS", "UI development"],
-    },
-    {
-      key: "data",
-      label: "Data & Backend",
-      items: ["PostgreSQL", "Prisma", "Vector search", "Data modeling", "Database design", "JSON"],
-    },
-    {
-      key: "practice",
+      key: "engineering",
       label: "Engineering",
       items: [
-        "Data Structures & Algorithms", "OOP", "Software engineering", "Evaluation testing",
-        "Debugging", "API integration", "Agile",
+        "Python", "TypeScript", "JavaScript", "Java", "SQL", "C++", "C", "R",
+        "React Native", "Expo", "REST APIs", "HTML / CSS", "UI development",
+        "Data Structures & Algorithms", "OOP", "Evaluation testing", "Debugging", "API integration", "Agile",
       ],
     },
     {
-      key: "tools",
-      label: "Tools",
-      items: ["Git", "GitHub", "AWS Bedrock", "VS Code", "Jupyter"],
+      key: "data",
+      label: "Data & Cloud",
+      items: [
+        "PostgreSQL", "Prisma", "Vector search", "Data modeling", "Database design", "JSON",
+        "AWS Bedrock", "Git", "GitHub", "VS Code", "Jupyter",
+      ],
     },
   ],
 
   contact: {
-    headline: "Have a system worth building?",
-    sub: "The fastest way to reach me is email. Bring a hard problem and I will read every line.",
+    lines: ["Let's build", "something", "that holds up."],
+    accent: "that holds up.",
+    sub: "Email is the fastest way to reach me. Bring a hard problem and I will read every line.",
     primaryEmail: "subhashgalla33@gmail.com",
   },
 
   meta: {
     siteUrl: "https://subhashgalla.vercel.app", // TODO: real domain
-    title: "Subhash Galla — AI & Software Engineer",
+    title: "Subhash Galla, AI & Software Engineer",
     description:
       "Subhash Galla builds grounded LLM systems and full-stack products: retrieval pipelines, natural-language planners, and document AI, with selected projects and experience.",
   },

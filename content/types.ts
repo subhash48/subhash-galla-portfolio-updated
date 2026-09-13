@@ -27,12 +27,14 @@ export type Project = {
   /** 2-4 sentences for the expanded view */
   summary: string;
   role: string;
-  /** ISO-ish, e.g. "2025" or "2024 – 2025" (hyphen, never an em dash) */
+  /** e.g. "2025" or "2024 – 2025" (en dash for ranges, never an em dash) */
   timeframe: string;
   /** ordered, most load-bearing first; keep to ~6 */
   stack: string[];
   /** what the graph/domain tags are: e.g. ["Agentic AI", "Infra"] */
   domains: string[];
+  /** short discipline line for the cinematic work view, e.g. "Retrieval / Orchestration" */
+  kind: string;
   links: {
     live?: string;
     repo?: string;
@@ -45,7 +47,7 @@ export type Project = {
     /** optional secondary shots for the case study */
     gallery?: { src: string; alt: string }[];
   } | null;
-  /** optional hard numbers — ONLY real, measured values */
+  /** optional hard numbers: ONLY real, measured values */
   metrics?: { value: string; label: string }[];
 };
 
@@ -92,12 +94,18 @@ export type Portfolio = {
   /** primary nav order */
   nav: { id: string; label: string }[];
   hero: {
-    /** <= 2 lines. the accent word is wrapped in {signal}...{/signal} */
-    headline: string;
-    /** <= 20 words */
+    /** the identity statement, one string per line; ALL CAPS is applied in CSS */
+    lines: string[];
+    /** the exact word (within `lines`) that takes the frame-derived accent, or "" */
+    accent: string;
+    /** <= 24 words, sits under the statement */
     sub: string;
   };
   about: {
+    /** the oversized opening statement, one string per line */
+    statement: string[];
+    /** the word within `statement` that takes the accent, or "" */
+    statementAccent: string;
     /** editorial: 2-3 short paragraphs, no "passionate", no clichés */
     paragraphs: string[];
     /** signals under the story: what you're doing now / thinking about */
@@ -108,8 +116,10 @@ export type Portfolio = {
   education: Education[];
   capabilities: CapabilityGroup[];
   contact: {
-    /** the closing statement — an invitation matched to the identity */
-    headline: string;
+    /** the oversized closing statement, one string per line */
+    lines: string[];
+    /** the word within `lines` that takes the accent, or "" */
+    accent: string;
     sub: string;
     /** the one primary channel */
     primaryEmail: string;

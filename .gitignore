@@ -42,4 +42,5 @@ next-env.d.ts
 
 # agent tooling (imported design skills + local settings, not portfolio source)
 .claude/
+.impeccable/
 skills-lock.json

@@ -1,11 +1,6 @@
 import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { Hero } from "@/components/sections/hero";
-import { Work } from "@/components/sections/work";
-import { About } from "@/components/sections/about";
-import { Experience } from "@/components/sections/experience";
-import { Capabilities } from "@/components/sections/capabilities";
-import { Contact } from "@/components/sections/contact";
+import { Film } from "@/components/film/film";
+import { Rail } from "@/components/film/rail";
 import { portfolio } from "@/content/portfolio";
 
 export default function Page() {
@@ -14,15 +9,8 @@ export default function Page() {
   return (
     <>
       <Nav />
-      <main id="main">
-        <Hero />
-        <Work />
-        <About />
-        <Experience />
-        <Capabilities />
-        <Contact />
-      </main>
-      <Footer />
+      <Film />
+      <Rail />
 
       <script
         type="application/ld+json"

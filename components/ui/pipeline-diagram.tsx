@@ -1,10 +1,10 @@
 import { diagrams } from "@/content/diagrams";
 import { cn } from "@/lib/utils";
 
-const COL_W = 168;
-const ROW_H = 92;
-const NODE_W = 132;
-const NODE_H = 46;
+const COL_W = 196;
+const ROW_H = 116;
+const NODE_W = 158;
+const NODE_H = 56;
 
 function center(col: number, row: number) {
   return { x: col * COL_W + COL_W / 2, y: row * ROW_H + ROW_H / 2 };
@@ -77,7 +77,7 @@ export function PipelineDiagram({
             key={i}
             d={path}
             fill="none"
-            stroke={e.feedback ? "var(--signal-dim)" : "var(--line-strong)"}
+            stroke={e.feedback ? "var(--ink-4)" : "var(--line-strong)"}
             strokeWidth={1.25}
             strokeDasharray={e.feedback ? "3 4" : undefined}
             markerEnd={`url(#arrow-${slug})`}
@@ -89,7 +89,7 @@ export function PipelineDiagram({
       {/* travelling signal */}
       <circle
         r="3.2"
-        fill="var(--signal-bright)"
+        fill="var(--accent)"
         className="diagram-signal"
         style={{ offsetPath: `path("${flowPath}")` } as React.CSSProperties}
       />
@@ -105,8 +105,9 @@ export function PipelineDiagram({
               width={NODE_W}
               height={NODE_H}
               rx={store ? 4 : io ? 23 : 6}
-              fill="var(--surface-2)"
-              stroke={io ? "var(--signal-dim)" : "var(--line-strong)"}
+              fill="var(--panel)"
+              stroke={io ? "var(--accent)" : "var(--line-strong)"}
+              strokeOpacity={io ? 0.55 : 1}
               strokeWidth={1}
             />
             <text
@@ -115,7 +116,7 @@ export function PipelineDiagram({
               textAnchor="middle"
               dominantBaseline="central"
               fill={io ? "var(--ink)" : "var(--ink-2)"}
-              style={{ fontSize: 11.5, fontFamily: "var(--font-mono)", letterSpacing: "0.01em" }}
+              style={{ fontSize: 13, fontFamily: "var(--font-mono)", letterSpacing: "0.01em" }}
             >
               {n.label}
             </text>

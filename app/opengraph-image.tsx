@@ -1,12 +1,12 @@
 import { ImageResponse } from "next/og";
 import { portfolio } from "@/content/portfolio";
 
-export const alt = `${portfolio.person.name} — ${portfolio.person.role}`;
+export const alt = `${portfolio.person.name}, ${portfolio.person.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OG() {
-  const { person } = portfolio;
+  const { person, hero } = portfolio;
   return new ImageResponse(
     (
       <div
@@ -16,48 +16,41 @@ export default function OG() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#0a0b0d",
+          background:
+            "radial-gradient(120% 140% at 8% -10%, #6b5aa8 0%, transparent 46%), radial-gradient(120% 140% at 100% 120%, #c9518e 0%, transparent 42%), #0b0c14",
           padding: 80,
           fontFamily: "sans-serif",
         }}
       >
-        {/* the S signal path */}
-        <svg width="120" height="120" viewBox="0 0 32 32" fill="none">
-          <path
-            d="M21 8 L10 8 L9 15.5 L23 16.5 L22 24 L11 24"
-            stroke="#eaa94b"
-            strokeWidth={1.6}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity={0.5}
-          />
-          <circle cx="11" cy="24" r="2.6" fill="#f7bd63" />
-        </svg>
+        <div style={{ display: "flex", fontSize: 22, letterSpacing: "0.28em", textTransform: "uppercase", color: "#a49fc4" }}>
+          {person.name}
+        </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
               display: "flex",
               flexWrap: "wrap",
-              fontSize: 76,
-              color: "#f3f4f6",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.1,
+              fontSize: 68,
+              fontWeight: 700,
+              color: "#f1efe9",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.04,
+              textTransform: "uppercase",
             }}
           >
-            <span>AI systems that stay&nbsp;</span>
-            <span style={{ color: "#eaa94b" }}>grounded.</span>
+            {hero.lines.join(" ")}
           </div>
           <div
             style={{
               display: "flex",
-              marginTop: 28,
-              fontSize: 30,
-              color: "#868b93",
+              marginTop: 26,
+              fontSize: 28,
+              color: "#f3a8d6",
               letterSpacing: "-0.01em",
             }}
           >
-            {`${person.name}   ·   ${person.role}`}
+            {person.role}
           </div>
         </div>
       </div>

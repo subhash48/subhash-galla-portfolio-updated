@@ -22,6 +22,8 @@ export const DUR = {
 /** Exponential ease-out. The default. Content arrives, then settles. */
 export const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export const EASE_INOUT: [number, number, number, number] = [0.65, 0, 0.35, 1];
+/** Weighted in-out. Structural moves, clip/mask reveals, the intro. Has inertia. */
+export const EASE_CINE: [number, number, number, number] = [0.76, 0, 0.24, 1];
 
 /** Natural spring for pointer physics and layout moves. */
 export const SPRING: Transition = { type: "spring", stiffness: 120, damping: 20, mass: 0.9 };
@@ -46,6 +48,23 @@ export const wipeUp: Variants = {
     clipPath: "inset(0% 0 0 0)",
     y: 0,
     transition: { duration: DUR.section, ease: EASE_OUT },
+  },
+};
+
+/** A single line of oversized type, uncovered from the baseline. Pair with an
+ *  `overflow:hidden` parent (`.type-line`). Stagger `delay` per line. */
+export const lineClip: Variants = {
+  hidden: { y: "110%" },
+  shown: { y: 0, transition: { duration: 0.9, ease: EASE_CINE } },
+};
+
+/** Large media / visual: a clip-path curtain plus a slow settle of scale. */
+export const curtain: Variants = {
+  hidden: { clipPath: "inset(0 0 100% 0)", scale: 1.06 },
+  shown: {
+    clipPath: "inset(0 0 0% 0)",
+    scale: 1,
+    transition: { duration: 1.1, ease: EASE_CINE },
   },
 };
 

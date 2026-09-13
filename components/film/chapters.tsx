@@ -38,10 +38,7 @@ export function IntroChapter() {
           <span className="intro-name">{person.name}</span>
         </h1>
         <p className="greet-line intro-role" style={{ "--i": 1 } as React.CSSProperties}>
-          {person.role}
-        </p>
-        <p className="greet-line intro-where label" style={{ "--i": 2 } as React.CSSProperties}>
-          {person.location}
+          {person.tagline}
         </p>
       </Beat>
     </div>

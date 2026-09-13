@@ -10,6 +10,12 @@ import { DUR, EASE_OUT } from "@/lib/motion";
 
 const NAV_CHAPTERS = FILM.chapters.filter((c) => c.nav);
 const { person } = portfolio;
+/** "Subhash Galla" -> "SG": a quiet monogram, not the full name, in the nav */
+const monogram = person.name
+  .split(" ")
+  .map((w) => w[0])
+  .join("")
+  .toUpperCase();
 
 function go(e: React.MouseEvent, id: ChapterId) {
   e.preventDefault();
@@ -40,7 +46,7 @@ export function Nav() {
   return (
     <header className="nav">
       <a href="#intro" onClick={(e) => go(e, "intro")} className="nav-name" aria-label={`${person.name}, back to the top`}>
-        {person.name}
+        {monogram}
       </a>
 
       <ul className="nav-links" aria-label="Chapters">

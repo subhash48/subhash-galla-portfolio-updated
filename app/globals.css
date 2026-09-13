@@ -294,6 +294,19 @@ input, textarea { caret-color: var(--accent); }
 
 /* ---- anchors: where a beat sits in the frame ---- */
 .beat--lead     { top: calc(var(--nav-h) + 2vh); left: var(--gutter); max-width: min(44rem, 70vw); }
+/* intro only: grounded on the bottom edge, matching every other chapter's
+   anchor (band/low-lead/centre/about-lead/about-edu are all bottom-anchored;
+   .beat--lead's shared top position is the outlier, used only by identity).
+   A mid-frame top offset left equal, undifferentiated dead space above and
+   below the block; anchoring to the bottom instead ties it to the portrait's
+   shoulder line the same way nav ties to the top, so both edges read as
+   deliberate margins rather than one arbitrary float. Identity (also
+   anchor="lead") keeps the shared top position above, scoped by chapter hint
+   so the two never drift apart by accident. Mobile keeps the shared bottom
+   position (below) so the block never crowds the face on short viewports. */
+@media (min-width: 768px) {
+  .beat--lead[data-chapter-hint="intro"] { top: auto; bottom: clamp(11rem, 26vh, 17rem); }
+}
 .beat--low-lead { bottom: clamp(2.5rem, 9vh, 7rem); left: var(--gutter); right: var(--gutter); max-width: min(52rem, 78vw); }
 .beat--band     { bottom: clamp(2rem, 7vh, 6rem); left: var(--gutter); right: var(--gutter); }
 .beat--column   { top: 50%; left: var(--gutter); transform: translateY(-50%); width: min(40rem, 44vw); }
@@ -314,6 +327,21 @@ input, textarea { caret-color: var(--accent); }
 .scrim--corner-lead {
   inset: -14vh -30vw -22vh -12vw;
   background: radial-gradient(75% 85% at 22% 30%, rgb(var(--film-ground) / 0.82) 0%, rgb(var(--film-ground) / 0.5) 42%, transparent 72%);
+}
+/* intro only: this scrim's inset is sized against .beat--lead's own box (its
+   containing block), which is a small shrink-wrapped column, not a
+   full-bleed band like the other anchors. The base rule above only stays
+   off-screen because identity's beat sits near the top; now that intro sits
+   mid-frame (see .beat--lead[data-chapter-hint="intro"] above), the same
+   percentages would land its edge inside the viewport as a visible box. Use
+   an explicit-length ellipse (decoupled from that box's size) and enough
+   overshoot to clear the frame in every direction, so the falloff is a pure
+   feather with no readable edge. */
+@media (min-width: 768px) {
+  .beat--lead[data-chapter-hint="intro"] .scrim--corner-lead {
+    inset: -70vh -22vw -70vh -22vw;
+    background: radial-gradient(34vw 32vh at 8% 42%, rgb(var(--film-ground) / 0.4) 0%, rgb(var(--film-ground) / 0.2) 46%, transparent 80%);
+  }
 }
 .scrim--corner-low-lead {
   inset: -26vh -34vw -12vh -12vw;
@@ -346,13 +374,16 @@ input, textarea { caret-color: var(--accent); }
    DEVICES  (driven purely from --in / --out / --pos the engine writes)
    ================================================================ */
 
-/* intro: present at load, drifts up and out as the void dissolves */
+/* intro: present at load, drifts up and out as the void dissolves. The
+   identity group composes in just after the nav monogram (nav-in above
+   starts at 60ms) — restrained: short duration, a tight internal stagger,
+   a few px of vertical settle, never a typewriter or a blur reveal. */
 [data-device="greet"] .copy { transform: translate3d(0, calc(var(--out, 0) * -4vh), 0); }
 [data-device="greet"] .greet-line {
-  animation: greet-in 900ms var(--ease-out) both;
-  animation-delay: calc(var(--i, 0) * 180ms + 120ms);
+  animation: greet-in 650ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 60ms + 180ms);
 }
-@keyframes greet-in { from { opacity: 0; transform: translate3d(0, 10px, 0); } to { opacity: 1; transform: none; } }
+@keyframes greet-in { from { opacity: 0; transform: translate3d(0, 8px, 0); } to { opacity: 1; transform: none; } }
 
 /* identity: lines rise from clip masks while the city materialises; on exit
    they fragment sideways in alternating directions */
@@ -542,9 +573,18 @@ input, textarea { caret-color: var(--accent); }
   display: flex; align-items: center; justify-content: space-between;
   padding-inline: var(--gutter);
   pointer-events: none;
+  animation: nav-in 600ms var(--ease-out) both;
+  animation-delay: 60ms;
 }
+@keyframes nav-in { from { opacity: 0; transform: translate3d(0, -6px, 0); } to { opacity: 1; transform: none; } }
 .nav > * { pointer-events: auto; }
-.nav-name { font-size: 0.875rem; font-weight: 500; color: var(--ink); letter-spacing: -0.01em; }
+/* a quiet editorial signature, not a logo mark: plain typography, no
+   enclosing shape, a hair of tracking instead of weight to read as a mark */
+.nav-name {
+  font-size: 0.875rem; font-weight: 500; color: var(--ink-3); letter-spacing: 0.03em;
+  transition: color var(--dur-ui) var(--ease-out);
+}
+.nav-name:hover { color: var(--ink); }
 .nav-links { display: flex; gap: 2px; margin: 0; padding: 0; list-style: none; }
 .nav-link {
   display: inline-flex; align-items: center; gap: 8px;
@@ -617,10 +657,23 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
    CHAPTER COMPOSITIONS
    ================================================================ */
 
-/* intro */
-.intro-name { display: block; font-size: clamp(1.05rem, 1.7vw, 1.35rem); font-weight: 500; color: var(--ink); letter-spacing: -0.01em; }
-.intro-role { display: block; margin-top: 6px; font-size: var(--t-small); color: var(--ink-2); }
-.intro-where { display: block; margin-top: 18px; }
+/* intro: the identity anchor — a calm, editorial title card, not a bold
+   website heading. Composes the site's own display voice (.display /
+   .display--sentence — the sentence-case variant every other title card
+   skips) instead of a bespoke weight, so the name reads as the same
+   typographic family as Work, Experience, and About, not a stray H1. */
+.intro-name {
+  display: block; font-size: clamp(2.75rem, 1.5rem + 1.7vw, 3.25rem); /* 44–52px */
+  font-family: var(--font-display); font-weight: 600; font-variation-settings: "wdth" 104;
+  line-height: 1.02; letter-spacing: -0.02em; text-transform: none;
+  color: var(--ink);
+  text-shadow: 0 1px 16px rgb(var(--black) / 0.12);
+}
+.intro-role {
+  display: block; margin-top: 18px; max-width: min(560px, 90vw);
+  font-size: clamp(1.0625rem, 0.95rem + 0.3vw, 1.1875rem); /* 17–19px */
+  font-weight: 400; line-height: 1.62; color: rgb(var(--ivory) / 0.78);
+}
 
 /* identity */
 .identity h1 { font-size: var(--t-title); max-width: 12ch; }
@@ -761,6 +814,8 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   .beat--column { width: min(34rem, 52vw); }
   .beat--about-lead { width: min(24rem, 44vw); }
   .beat--about-edu { width: min(23rem, 46vw); }
+  .intro-name { font-size: clamp(2rem, 4vw, 2.5rem); } /* 32–40px */
+  .intro-role { font-size: clamp(0.9375rem, 1.8vw, 1.0625rem); } /* 15–17px */
 }
 
 /* phones (and the strip composition): every beat sits under the film strip */
@@ -785,6 +840,8 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   }
   .beat--lead { bottom: auto; top: calc(var(--nav-h) + 4px); }
   .scrim--corner-lead { inset: -20vh -12vw -12vh -12vw; background: linear-gradient(to bottom, rgb(var(--film-ground) / 0.9), rgb(var(--film-ground) / 0.55) 55%, transparent 100%); }
+  .intro-name { font-size: clamp(1.75rem, 7vw, 2.125rem); } /* 28–34px */
+  .intro-role { font-size: clamp(0.9375rem, 4vw, 1rem); } /* 15–16px */
   .identity h1 { max-width: none; }
   .identity .sub { margin-top: var(--s-4); }
   .work-beat .copy { display: block; }

@@ -99,6 +99,8 @@ export type Portfolio = {
     name: string;
     /** short: "AI & Software Engineer" */
     role: string;
+    /** 2-3 line intro under the name in the hero identity block */
+    tagline: string;
     /** the 1-2 sentence positioning, first person, confident, concrete */
     statement: string;
     location?: string;

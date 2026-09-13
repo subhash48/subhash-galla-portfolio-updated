@@ -305,7 +305,15 @@ input, textarea { caret-color: var(--accent); }
    so the two never drift apart by accident. Mobile keeps the shared bottom
    position (below) so the block never crowds the face on short viewports. */
 @media (min-width: 768px) {
-  .beat--lead[data-chapter-hint="intro"] { top: auto; bottom: clamp(11rem, 26vh, 17rem); }
+  /* capped narrower than the shared .beat--lead measure (44rem/70vw, used by
+     identity): the intro sits beside a portrait rather than over open frame,
+     so its column must stay short enough that no line's right edge can reach
+     the body — width is the primary defence against text-on-portrait, height
+     (bottom offset) the secondary one. */
+  .beat--lead[data-chapter-hint="intro"] {
+    top: auto; bottom: clamp(12.5rem, 29vh, 18.5rem);
+    max-width: min(27rem, 40vw);
+  }
 }
 .beat--low-lead { bottom: clamp(2.5rem, 9vh, 7rem); left: var(--gutter); right: var(--gutter); max-width: min(52rem, 78vw); }
 .beat--band     { bottom: clamp(2rem, 7vh, 6rem); left: var(--gutter); right: var(--gutter); }
@@ -673,33 +681,37 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
 /* intro: the identity anchor — a calm, editorial title card, not a bold
    website heading. Kicker names the three real pillars against a thin rule
    (mono, the same .label voice as every index/metadata mark on the site);
-   name is two stacked words at --t-title (Identity/Contact's own scale, not
-   a bespoke size), graded top-to-bottom into the live film-ambient tone so
-   it reads as lit by the same source as the frame, not a flat sticker on
-   top of it; role stays the supporting paragraph; scroll cue and the
-   bottom-right mantra close the block in the same quiet mono voice as the
-   kicker, never a separate UI language. */
-.intro-kicker { display: flex; align-items: stretch; gap: 14px; margin-bottom: 20px; }
+   name is a fixed brushed-steel gradient — bright top, cooling to a muted
+   slate at the foot of "Galla" — deliberately built from neutral greys, NOT
+   the live film-accent tone, which reads pink/purple against this scene and
+   cheapens the type. The frame stays colourful; the name stays a controlled
+   metallic constant against a background that never stops shifting. Sized
+   down from the shared --t-title scale (identity/contact's own scale) so it
+   anchors the column without its second line reaching toward the portrait.
+   Role stays the supporting paragraph, narrower than before for the same
+   reason; scroll cue and the bottom-right mantra close the block in the
+   same quiet mono voice as the kicker, never a separate UI language. */
+.intro-kicker { display: flex; align-items: stretch; gap: 14px; margin-bottom: var(--s-5); }
 .intro-kicker-rule { flex-shrink: 0; width: 1px; background: rgb(var(--ivory) / 0.22); }
 .intro-kicker .label { display: flex; flex-direction: column; gap: 3px; }
 .intro-name-group {
-  background: linear-gradient(180deg, var(--ink) 0%, var(--ink) 42%, rgb(var(--film-avg) / 0.92) 100%);
+  background: linear-gradient(180deg, rgb(252 252 253 / 0.98) 0%, rgb(226 230 237 / 0.95) 40%, rgb(151 160 176 / 0.88) 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .intro-name {
-  display: block; font-size: var(--t-title);
-  font-family: var(--font-display); font-weight: 600; font-variation-settings: "wdth" 104;
-  line-height: 0.98; letter-spacing: -0.02em; text-transform: none;
-  text-shadow: 0 2px 24px rgb(var(--black) / 0.16);
+  display: block; font-size: clamp(2.5rem, 1.4rem + 4.2vw, 4.75rem); /* 40–76px */
+  font-family: var(--font-display); font-weight: 700; font-variation-settings: "wdth" 104;
+  line-height: 1.02; letter-spacing: -0.015em; text-transform: none;
+  text-shadow: 0 2px 28px rgb(var(--black) / 0.4);
 }
 .intro-role {
-  display: block; margin-top: 22px; max-width: min(560px, 90vw);
-  font-size: clamp(1.0625rem, 0.95rem + 0.3vw, 1.1875rem); /* 17–19px */
-  font-weight: 400; line-height: 1.62; color: rgb(var(--ivory) / 0.78);
+  display: block; margin-top: var(--s-6); max-width: min(30rem, 84%);
+  font-size: clamp(1rem, 0.92rem + 0.3vw, 1.125rem); /* 16–18px */
+  font-weight: 400; line-height: 1.6; color: rgb(var(--ivory) / 0.74);
 }
 .intro-scroll {
   display: flex; align-items: center; gap: 12px;
-  margin-top: 32px; color: rgb(var(--ivory) / 0.45);
+  margin-top: var(--s-7); color: rgb(var(--ivory) / 0.45);
 }
 .intro-scroll-dot {
   position: relative; flex-shrink: 0; width: 15px; height: 15px; border-radius: 50%;
@@ -873,7 +885,7 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   .beat--column { width: min(34rem, 52vw); }
   .beat--about-lead { width: min(24rem, 44vw); }
   .beat--about-edu { width: min(23rem, 46vw); }
-  .intro-name { font-size: clamp(2.5rem, 5.2vw, 3.25rem); } /* 40–52px */
+  .intro-name { font-size: clamp(2.3rem, 5.2vw, 3.25rem); } /* 37–52px */
   .intro-role { font-size: clamp(0.9375rem, 1.8vw, 1.0625rem); } /* 15–17px */
 }
 

@@ -15,7 +15,7 @@ export const portfolio: Portfolio = {
     role: "AI & Software Engineer",
     tagline:
       "AI & Software Engineer building intelligent systems across LLMs, full-stack software, and cloud infrastructure — from model behavior to real-world products.",
-    focus: ["LLMs", "Software", "Cloud"],
+    focus: ["Building", "Intelligent", "Tomorrow"],
     statement:
       "I build LLM systems that stay grounded and the full-stack products that put them to work. Retrieval pipelines, natural-language planners, and document AI that beat their baselines on the numbers that matter.",
     location: "Denton, Texas",

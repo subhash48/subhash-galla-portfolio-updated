@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Subhash Galla — Brag</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="assets/music/audio-data.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1920px; height: 1080px; overflow: hidden;
+        background: #0d0c14;
+      }
+      body { font-family: "JetBrains Mono", monospace; }
+
+      /* ---- palette (from the live site's real tokens) ---- */
+      :root {
+        --ivory: 241 239 233;
+        --ground: 26 24 40;
+        --accent-pink: 255 173 219;
+        --accent-blue: 64 100 174;
+        --chrome-top: 252 252 253;
+        --chrome-mid: 226 230 237;
+        --chrome-bottom: 151 160 176;
+      }
+
+      #root {
+        position: relative;
+        width: 1920px; height: 1080px;
+        overflow: hidden;
+        background: rgb(var(--ground));
+      }
+
+      .clip { position: absolute; inset: 0; }
+
+      /* ---- persistent backdrop: shared across every scene, one continuous shot ---- */
+      #backdrop { position: absolute; inset: 0; z-index: 0; }
+      #bg-photo-wrap { position: absolute; inset: 0; overflow: hidden; }
+      #bg-photo {
+        position: absolute; top: 50%; left: 50%;
+        width: 1920px; height: 1080px;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        display: block;
+      }
+      #bg-tint {
+        position: absolute; inset: 0;
+        background:
+          linear-gradient(100deg, rgb(var(--ground) / 0.88) 0%, rgb(var(--ground) / 0.62) 34%, rgb(var(--ground) / 0.2) 62%, rgb(var(--ground) / 0.5) 100%),
+          linear-gradient(0deg, rgb(var(--ground) / 0.55) 0%, transparent 30%, transparent 72%, rgb(var(--ground) / 0.4) 100%);
+      }
+      #bg-streaks { position: absolute; inset: 0; mix-blend-mode: screen; }
+      .streak {
+        position: absolute;
+        width: 2400px; height: 90px;
+        filter: blur(46px);
+        opacity: 0.5;
+        border-radius: 999px;
+      }
+      .streak--pink { background: linear-gradient(90deg, transparent, rgb(var(--accent-pink) / 0.55), transparent); }
+      .streak--blue { background: linear-gradient(90deg, transparent, rgb(var(--accent-blue) / 0.5), transparent); }
+
+      /* ---- scene shell ----
+         The .clip section itself is never animated (the framework owns its
+         visibility window) — a child .scene-inner carries the crossfade
+         autoAlpha tween instead. */
+      .scene { z-index: 2; }
+      .scene-inner {
+        position: absolute; inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 150px;
+      }
+      /* Scenes 2-4 anchor high rather than vertical-center: the sitter's shoulder
+         line encroaches from the right as y increases (a diagonal silhouette,
+         not a vertical one), so content sitting in the lower half of the frame
+         has far less clear width than content sitting in the upper half. */
+      #scene-2-inner, #scene-3-inner, #scene-4-inner {
+        justify-content: flex-start;
+        padding-top: 230px;
+      }
+      .scene-dark-scrim { position: absolute; inset: 0; background: rgb(var(--ground) / 0); z-index: 1; }
+
+      /* ---- typography roles ----
+         Column widths below are sized against the real backdrop plate
+         (assets/images/hero-frame.png = the live site's own frame 001): the
+         sitter's silhouette starts around x=800 near the top of frame and
+         creeps to x~560 by the bottom, so every line here is capped well
+         inside that, tightest at the bottom of each block. */
+      .kicker-word {
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 76px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: rgb(var(--ivory) / 0.94);
+        line-height: 1.1;
+      }
+      .name-line {
+        display: block;
+        font-family: "Archivo Black", sans-serif;
+        font-weight: 400;
+        font-size: 108px;
+        line-height: 1.0;
+        letter-spacing: -0.01em;
+        background: linear-gradient(180deg, rgb(var(--chrome-top)) 0%, rgb(var(--chrome-mid)) 40%, rgb(var(--chrome-bottom)) 100%);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .tagline {
+        display: block;
+        margin-top: 34px;
+        max-width: 400px;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 400;
+        font-size: 27px;
+        line-height: 1.55;
+        color: rgb(var(--ivory) / 0.82);
+      }
+      .metric-card {
+        position: absolute;
+        left: 150px;
+        width: 520px;
+        padding: 26px 34px;
+        border-radius: 18px;
+        border: 1px solid rgb(var(--ivory) / 0.16);
+        background: linear-gradient(180deg, rgb(var(--ivory) / 0.07), rgb(var(--ivory) / 0.015) 60%), rgb(10 10 16 / 0.5);
+        box-shadow: 0 40px 90px -30px rgb(0 0 0 / 0.6);
+      }
+      .metric-label {
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 17px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgb(var(--ivory) / 0.62);
+      }
+      .metric-value {
+        display: block;
+        margin-top: 10px;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 64px;
+        letter-spacing: -0.01em;
+        font-variant-numeric: tabular-nums;
+        color: rgb(var(--ivory) / 0.96);
+      }
+      .punchline {
+        display: block;
+        font-family: "Archivo Black", sans-serif;
+        font-weight: 400;
+        font-size: 62px;
+        line-height: 1.22;
+        max-width: 480px;
+        color: rgb(var(--ivory) / 0.96);
+      }
+      .email {
+        display: block;
+        margin-top: 30px;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 400;
+        font-size: 25px;
+        letter-spacing: 0.02em;
+        color: rgb(var(--ivory) / 0.7);
+      }
+      .sg-mark {
+        position: absolute;
+        left: 150px; bottom: 96px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 24px;
+        letter-spacing: 0.08em;
+        color: rgb(var(--ivory) / 0.55);
+      }
+      .sg-rule { width: 64px; height: 1px; background: rgb(var(--ivory) / 0.3); }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="brag"
+      data-start="0"
+      data-duration="22.9"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- ================= persistent backdrop (untimed, one continuous shot) ================= -->
+      <div id="backdrop">
+        <div id="bg-photo-wrap">
+          <img id="bg-photo" src="assets/images/hero-frame.png" alt="" />
+        </div>
+        <div id="bg-tint"></div>
+        <div id="bg-streaks">
+          <div class="streak streak--pink" id="streak-1" style="top: 18%; left: 30%;"></div>
+          <div class="streak streak--blue" id="streak-2" style="top: 42%; left: 45%;"></div>
+          <div class="streak streak--pink" id="streak-3" style="top: 64%; left: 38%;"></div>
+          <div class="streak streak--blue" id="streak-4" style="top: 82%; left: 55%;"></div>
+        </div>
+      </div>
+
+      <!-- ================= Scene 1 — Hook: the mantra — [0, 5.1) ================= -->
+      <section id="scene-1" class="clip scene" data-start="0" data-duration="5.1" data-track-index="1">
+        <div class="scene-inner" id="scene-1-inner">
+          <div class="scene-dark-scrim"></div>
+          <div style="position: relative; z-index: 2;">
+            <span class="kicker-word" id="s1-w1">Building</span>
+            <span class="kicker-word" id="s1-w2">Intelligent</span>
+            <span class="kicker-word" id="s1-w3">Tomorrow</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Scene 2 — Reveal: the name — [4.5, 11.5) ================= -->
+      <section id="scene-2" class="clip scene" data-start="4.5" data-duration="7.0" data-track-index="2">
+        <div class="scene-inner" id="scene-2-inner">
+          <div class="scene-dark-scrim"></div>
+          <div style="position: relative; z-index: 2;">
+            <h1 style="margin:0;">
+              <span class="name-line" id="s2-name1">Subhash</span>
+              <span class="name-line" id="s2-name2">Galla</span>
+            </h1>
+            <p class="tagline" id="s2-tagline">AI &amp; Software Engineer building intelligent systems across LLMs, full-stack software, and cloud infrastructure.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Scene 3 — Highlight: proof, not promises — [10.9, 17.5) ================= -->
+      <section id="scene-3" class="clip scene" data-start="10.9" data-duration="6.6" data-track-index="3">
+        <div class="scene-inner" id="scene-3-inner">
+          <div class="scene-dark-scrim" style="background: rgb(var(--ground) / 0.42);"></div>
+          <div style="position: relative; z-index: 2; display: flex; flex-direction: column; gap: 24px;">
+            <div class="metric-card" id="s3-card1" style="position: relative; left: 0;">
+              <span class="metric-label">Retrieval-augmented chatbot</span>
+              <span class="metric-value">+25%</span>
+              <span class="metric-label" style="margin-top: 8px; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 15px; color: rgb(var(--ivory) / 0.75);">answer relevance vs. LLM-only baseline</span>
+            </div>
+            <div class="metric-card" id="s3-card2" style="position: relative; left: 0;">
+              <span class="metric-label">Robot task planner</span>
+              <span class="metric-value">62 &rarr; 88%</span>
+              <span class="metric-label" style="margin-top: 8px; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 15px; color: rgb(var(--ivory) / 0.75);">valid task completion</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Scene 4 — Outro / punchline — [16.9, 22.9) ================= -->
+      <section id="scene-4" class="clip scene" data-start="16.9" data-duration="6.0" data-track-index="4">
+        <div class="scene-inner" id="scene-4-inner">
+          <div class="scene-dark-scrim"></div>
+          <div style="position: relative; z-index: 2;">
+            <span class="punchline" id="s4-line">Let&rsquo;s build something that holds up.</span>
+            <span class="email" id="s4-email">subhashgalla33@gmail.com</span>
+          </div>
+          <div class="sg-mark" id="s4-sg">
+            <span>SG</span>
+            <span class="sg-rule"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Audio bed ================= -->
+      <audio
+        id="music-bed"
+        src="assets/music/brag-bed.mp3"
+        data-start="0"
+        data-duration="22.9"
+        data-track-index="10"
+        data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.8,"v":0.55},{"t":16.5,"v":0.55},{"t":17.6,"v":0.78},{"t":19.0,"v":0.78},{"t":21.0,"v":0}]}]}'
+      ></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      // ---------------- persistent backdrop ----------------
+      // slow continuous Ken Burns push-in across the whole film, one shot, no cuts on the plate itself
+      tl.fromTo("#bg-photo-wrap", { scale: 1.0 }, { scale: 1.08, duration: 22.9, ease: "none" }, 0);
+
+      // gentle independent drift on each light streak (ambient, non-looping — video is one-shot)
+      tl.fromTo("#streak-1", { x: -60, rotation: -6 }, { x: 60, rotation: -6, duration: 22.9, ease: "sine.inOut" }, 0);
+      tl.fromTo("#streak-2", { x: 50, rotation: -4 }, { x: -70, rotation: -4, duration: 22.9, ease: "sine.inOut" }, 0);
+      tl.fromTo("#streak-3", { x: -40, rotation: -7 }, { x: 80, rotation: -7, duration: 22.9, ease: "sine.inOut" }, 0);
+      tl.fromTo("#streak-4", { x: 70, rotation: -5 }, { x: -50, rotation: -5, duration: 22.9, ease: "sine.inOut" }, 0);
+
+      // fade up from black at the very start (cinematic open)
+      tl.fromTo("#root", { "--open": 0 }, { "--open": 0, duration: 0.001 }, 0); // no-op keep root stable
+      tl.fromTo("#backdrop", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+
+      // ---------------- crossfades between scenes (autoAlpha, 0.6s overlap) ----------------
+      // Targets the inner wrapper, never the .clip section itself — the framework
+      // owns clip visibility, so animating autoAlpha on a clip element is rejected by lint.
+      tl.set("#scene-1-inner", { autoAlpha: 1 }, 0);
+      tl.set("#scene-2-inner", { autoAlpha: 0 }, 0);
+      tl.set("#scene-3-inner", { autoAlpha: 0 }, 0);
+      tl.set("#scene-4-inner", { autoAlpha: 0 }, 0);
+
+      tl.to("#scene-1-inner", { autoAlpha: 0, duration: 0.6, ease: "power1.inOut" }, 4.5);
+      tl.to("#scene-2-inner", { autoAlpha: 1, duration: 0.6, ease: "power1.inOut" }, 4.5);
+
+      tl.to("#scene-2-inner", { autoAlpha: 0, duration: 0.6, ease: "power1.inOut" }, 10.9);
+      tl.to("#scene-3-inner", { autoAlpha: 1, duration: 0.6, ease: "power1.inOut" }, 10.9);
+
+      tl.to("#scene-3-inner", { autoAlpha: 0, duration: 0.6, ease: "power1.inOut" }, 16.9);
+      tl.to("#scene-4-inner", { autoAlpha: 1, duration: 0.6, ease: "power1.inOut" }, 16.9);
+
+      // ---------------- Scene 1: kicker mantra, one word at a time ----------------
+      tl.set(["#s1-w1", "#s1-w2", "#s1-w3"], { autoAlpha: 0, y: 22 }, 0);
+      tl.to("#s1-w1", { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.4);
+      // beat-grid: word 2 at 3.02s, word 3 at 4.02s (every-other beat of the 120bpm grid — full-speed beats
+      // are ~0.5s apart, too fast to read a new word each hit; every-other gives ~1s per word)
+      tl.to("#s1-w2", { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" }, 3.02); // beat-locked: 3.02s
+      tl.to("#s1-w3", { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" }, 4.02); // beat-locked: 4.02s
+
+      // ---------------- Scene 2: name slam + tagline settle ----------------
+      tl.fromTo("#s2-name1", { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 5.1);
+      tl.fromTo("#s2-name2", { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 5.18);
+      tl.fromTo("#s2-tagline", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, 5.9);
+
+      // ---------------- Scene 3: two proof cards, one at a time ----------------
+      tl.fromTo("#s3-card1", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }, 11.5); // beat-grid: card 1 at 11.5s
+      tl.fromTo("#s3-card2", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }, 13.9); // beat-grid: card 2 at 13.9s
+
+      // ---------------- Scene 4: punchline + email + monogram ----------------
+      tl.fromTo("#s4-line", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, 17.5);
+      tl.fromTo("#s4-email", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, ease: "power1.out" }, 18.3);
+      tl.fromTo("#s4-sg", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, ease: "power1.out" }, 18.5);
+
+      // ---------------- audio-reactive: subtle RMS breathing on the light-streak layer ----------------
+      // per-frame sampling per hyperframes-creative/audio-reactive.md — corporate/quiet energy, so kept
+      // to a small opacity swing (base 0.85, +/- 0.12) rather than anything visible as a "pulse".
+      if (typeof AUDIO_DATA !== "undefined") {
+        for (var f = 0; f < AUDIO_DATA.totalFrames; f++) {
+          (function (frame) {
+            tl.call(
+              function () {
+                var el = document.getElementById("bg-streaks");
+                if (el) el.style.opacity = String(0.85 + frame.rms * 0.12);
+              },
+              [],
+              frame.time,
+            );
+          })(AUDIO_DATA.frames[f]);
+        }
+      }
+
+      window.__timelines["brag"] = tl;
+    </script>
+  </body>
+</html>

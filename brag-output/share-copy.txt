@@ -1,0 +1,1 @@
+Subhash Galla, AI & Software Engineer: a portfolio where scrolling scrubs a real 300-frame cinematic film of the person, chapter by chapter — retrieval pipelines with +25% answer relevance over an LLM-only baseline, a task planner at 62 → 88% valid completion. Built end to end with Next.js, GSAP-driven film sequencing, and a token-based design system.

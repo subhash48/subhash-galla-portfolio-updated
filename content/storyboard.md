@@ -1,8 +1,8 @@
 # Storyboard: the film and the portfolio, authored together
 
-Source: `ezgif-74beda69edc28760-jpg/ezgif-frame-001.jpg … 300.jpg`, 1280x720, 24 fps
-(12.5 s). Sorted numerically. Served from `public/film/d` (desktop, original bytes)
-and `public/film/m` (phones, 960x540). Timing lives in `content/film.ts`.
+Source: `ezgif-262ae21270278c6d-png-split/ezgif-frame-001.png … 300.png`, 1920x1080,
+24 fps (12.5 s). Sorted numerically. Served from `public/scroll-frames` (both device
+classes, original bytes, uncompressed for now). Timing lives in `content/film.ts`.
 
 ## What the frames actually do (inspected at every 6th frame, plus a 10% grid)
 

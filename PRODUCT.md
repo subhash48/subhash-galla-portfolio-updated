@@ -30,6 +30,6 @@ Not a card-based developer portfolio. A cinematic interactive identity: a 300-fr
 
 ## Assets
 
-- `ezgif-74beda69edc28760-jpg/` source frames (1280x720 JPEG, 300 frames); served copies in `public/film`.
+- `ezgif-262ae21270278c6d-png-split/` source frames (1920x1080 PNG, lossless, 300 frames); served copies in `public/scroll-frames` (byte-for-byte, uncompressed — a deliberate temporary state to judge quality; revisit before shipping).
 - Architecture diagrams per project in `content/diagrams.ts` (real data paths, rendered as SVG).
 - Missing from the owner: GitHub and LinkedIn URLs, résumé PDF, per-project repo links, a real impact line for the Operations Review Tracker, final domain.

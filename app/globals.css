@@ -260,8 +260,8 @@ input, textarea { caret-color: var(--accent); }
 .film-grade {
   position: absolute; inset: 0; pointer-events: none;
   background:
-    radial-gradient(120% 95% at 50% 42%, transparent 55%, rgb(var(--black) / 0.42) 100%),
-    linear-gradient(180deg, rgb(var(--black) / 0.32) 0%, transparent 18%, transparent 78%, rgb(var(--black) / 0.28) 100%);
+    radial-gradient(120% 95% at 50% 42%, transparent 62%, rgb(var(--black) / 0.32) 100%),
+    linear-gradient(180deg, rgb(var(--black) / 0.22) 0%, transparent 16%, transparent 80%, rgb(var(--black) / 0.2) 100%);
 }
 
 .film-copy {
@@ -298,6 +298,10 @@ input, textarea { caret-color: var(--accent); }
 .beat--band     { bottom: clamp(2rem, 7vh, 6rem); left: var(--gutter); right: var(--gutter); }
 .beat--column   { top: 50%; left: var(--gutter); transform: translateY(-50%); width: min(40rem, 44vw); }
 .beat--centre   { bottom: clamp(2.5rem, 8vh, 7rem); left: var(--gutter); right: var(--gutter); text-align: center; }
+/* about: an asymmetric editorial pair. The narrative sits low-left, clear of
+   the centred close-up face; education answers it from the opposing corner. */
+.beat--about-lead { bottom: clamp(3rem, 12vh, 8.5rem); left: var(--gutter); width: min(28rem, 38vw); }
+.beat--about-edu  { bottom: clamp(2.5rem, 9vh, 6.5rem); right: var(--gutter); left: auto; width: min(20rem, 28vw); }
 
 /* ---- scrims: density only where the copy sits, as SIBLINGS of the copy ---- */
 .scrim {
@@ -323,6 +327,16 @@ input, textarea { caret-color: var(--accent); }
 .scrim--centre {
   inset: -36vh -12vw -12vh -12vw;
   background: linear-gradient(to top, rgb(var(--film-ground) / 0.96) 0%, rgb(var(--film-ground) / 0.82) 34%, rgb(var(--film-ground) / 0.4) 64%, transparent 100%);
+}
+/* about: local pools behind each column only, not a cross-frame wash — the
+   close-up stays visible everywhere except directly behind the type. */
+.scrim--about-lead {
+  inset: -18vh -8vw -10vh -12vw;
+  background: radial-gradient(62% 88% at 20% 82%, rgb(var(--film-ground) / 0.86) 0%, rgb(var(--film-ground) / 0.52) 46%, transparent 76%);
+}
+.scrim--about-edu {
+  inset: -14vh -12vw -8vh -8vw;
+  background: radial-gradient(58% 80% at 80% 86%, rgb(var(--film-ground) / 0.8) 0%, rgb(var(--film-ground) / 0.46) 44%, transparent 74%);
 }
 
 /* ================================================================
@@ -378,11 +392,21 @@ input, textarea { caret-color: var(--accent); }
   transform-origin: 0 50%;
 }
 
-/* capabilities: three columns arrive in reading order */
-[data-device="stagger"] .col {
-  --ci: clamp(0, calc((var(--in, 0) - var(--i, 0) * 0.16) / 0.55), 1);
-  opacity: var(--ci);
-  transform: translate3d(0, calc((1 - var(--ci)) * 16px), 0);
+/* what I do: one discipline dominates, settling in; as the next arrives this
+   one recedes — smaller, higher, fading — never a hard cut between the three */
+[data-device="discipline"] .discipline-n {
+  opacity: clamp(0, calc(var(--in, 0) * 1.6), 1);
+  transform: translate3d(0, calc((1 - var(--in, 0)) * 14px), 0) scale(calc(0.92 + var(--in, 0) * 0.08 - var(--out, 0) * 0.05));
+}
+[data-device="discipline"] .discipline-title {
+  clip-path: inset(-0.2em 0 calc((1 - var(--in, 0)) * 100%) 0);
+  transform: translate3d(0, calc((1 - var(--in, 0)) * 12px + var(--out, 0) * -22px), 0) scale(calc(1.04 - var(--in, 0) * 0.04 - var(--out, 0) * 0.03));
+  transform-origin: 50% 100%;
+}
+[data-device="discipline"] .discipline-blurb,
+[data-device="discipline"] .discipline-tags {
+  opacity: clamp(0, calc((var(--in, 0) - 0.4) / 0.45 - var(--out, 0) * 0.6), 1);
+  transform: translate3d(0, calc((1 - clamp(0, calc((var(--in, 0) - 0.4) / 0.45), 1)) * 10px), 0);
 }
 
 /* about A: a focus pull */
@@ -391,11 +415,14 @@ input, textarea { caret-color: var(--accent); }
   transform: scale(calc(0.985 + var(--in, 0) * 0.015)) translate3d(0, calc(var(--out, 0) * -2vh), 0);
   transform-origin: 0 100%;
 }
-/* about B: the story rises on glass */
-[data-device="rise"] .plane {
-  transform: translate3d(0, calc((1 - var(--in, 0)) * 3vh + (var(--pos, 0) - 0.5) * 1vh), calc((1 - var(--in, 0)) * -40px));
+/* about B/C: the story and education rise in directly off the frame — no
+   glass beneath them, so the rise is a plain settle, not a panel-lift */
+[data-device="rise"] .about-story,
+[data-device="rise"] .about-edu {
+  opacity: clamp(0, calc(var(--in, 0) * 1.4 - 0.3), 1);
+  transform: translate3d(0, calc((1 - var(--in, 0)) * 3vh + (var(--pos, 0) - 0.5) * 1vh), 0);
 }
-[data-device="rise"] .aside { opacity: clamp(0, calc(var(--in, 0) * 1.4 - 0.4), 1); }
+[data-device="rise"] .about-now { opacity: clamp(0, calc(var(--in, 0) * 1.6 - 0.55), 1); }
 
 /* contact: the statement settles from scale and holds; links follow */
 [data-device="finale"] .card { transform: scale(calc(1.08 - var(--in, 0) * 0.08)); transform-origin: 50% 100%; }
@@ -435,11 +462,17 @@ input, textarea { caret-color: var(--accent); }
 [data-film="static"] .copy .line > span,
 [data-film="static"] .copy .sub,
 [data-film="static"] .copy .follow,
-[data-film="static"] .copy .aside {
+[data-film="static"] .copy .about-story,
+[data-film="static"] .copy .about-now,
+[data-film="static"] .copy .about-edu,
+[data-film="static"] .copy .discipline-n,
+[data-film="static"] .copy .discipline-title,
+[data-film="static"] .copy .discipline-blurb,
+[data-film="static"] .copy .discipline-tags {
   transform: none !important; clip-path: none !important; filter: none !important; opacity: 1 !important;
 }
 [data-film="static"] .greet-line { animation: none; }
-[data-film="static"] .beat--band .copy, [data-film="static"] .beat--centre .copy, [data-film="static"] .beat--low-lead .copy, [data-film="static"] .beat--lead .copy { max-width: min(60rem, 100%); }
+[data-film="static"] .beat--band .copy, [data-film="static"] .beat--centre .copy, [data-film="static"] .beat--low-lead .copy, [data-film="static"] .beat--lead .copy, [data-film="static"] .beat--about-lead .copy, [data-film="static"] .beat--about-edu .copy { max-width: min(60rem, 100%); }
 [data-film="static"] .beat--centre .copy { margin-inline: auto; }
 
 /* ================================================================
@@ -618,22 +651,34 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
 .exp-plane li::before { content: ""; height: 1px; width: 14px; background: var(--ink-4); margin-top: 0.62em; }
 .exp-stack { margin-top: var(--s-4); padding-top: var(--s-4); border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: var(--t-label); letter-spacing: 0.06em; color: var(--ink-3); line-height: 1.7; }
 
-/* capabilities */
-.cap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-7); align-items: start; }
-.cap-head { font-size: clamp(1.1rem, 1.6vw, 1.5rem); }
-.cap-items { margin-top: var(--s-4); font-size: var(--t-small); line-height: 1.75; color: var(--ink-2); max-width: 32ch; }
-.cap-items .sep { color: var(--ink-4); }
+/* what I do: one large number, a two-line title, a sentence, a tag row */
+.discipline { max-width: min(46rem, 78vw); margin-inline: auto; }
+.discipline-n {
+  display: block; color: var(--accent); opacity: 0.88;
+  font-family: var(--font-display); font-variation-settings: "wdth" 108; font-weight: 700;
+  font-size: clamp(2.25rem, 6.4vw, 5rem); line-height: 0.9; letter-spacing: -0.03em;
+}
+.discipline-title { margin-top: var(--s-2); font-size: clamp(2.25rem, 6.8vw, 5.75rem); }
+.discipline-blurb { margin-top: var(--s-5); margin-inline: auto; max-width: 46ch; font-size: var(--t-lead); color: var(--ink-2); }
+.discipline-tags { margin-top: var(--s-4); }
+.discipline-tags .sep { color: var(--ink-4); }
 
-/* about */
-.about-statement { font-size: var(--t-statement); max-width: 22ch; }
-.about-plane { padding: var(--s-5) var(--s-6); max-width: 36rem; }
-.about-plane p + p { margin-top: var(--s-4); }
-.about-plane p { font-size: var(--t-small); line-height: 1.6; color: var(--ink-2); }
-.about-now { margin-top: var(--s-4); padding-top: var(--s-4); border-top: 1px solid var(--line); color: var(--ink); font-size: var(--t-body); }
-.about-aside { margin-top: var(--s-5); max-width: 44ch; }
-.about-aside .label { display: block; }
-.about-aside p { margin-top: 6px; font-size: var(--t-small); color: var(--ink-3); }
-.about-aside strong { font-weight: 500; color: var(--ink-2); }
+/* about: an editorial spread. The statement and story share one left
+   column; education answers from the opposing corner. No card, no box —
+   the type sits straight on the frame, held only by a local scrim. */
+.about-index { display: block; color: var(--accent); }
+.about-statement { margin-top: var(--s-3); font-size: var(--t-statement); max-width: 15ch; text-shadow: 0 2px 20px rgb(var(--black) / 0.5); }
+.about-lede, .about-story {
+  margin-top: var(--s-5); max-width: 38ch; font-size: var(--t-lead); color: var(--ink-2);
+  text-shadow: 0 2px 16px rgb(var(--black) / 0.55);
+}
+.about-now {
+  margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--line-strong);
+  color: var(--ink); font-size: var(--t-body); text-shadow: 0 2px 16px rgb(var(--black) / 0.55);
+}
+.about-edu .label { display: block; }
+.about-edu .credential { margin-top: 6px; font-size: var(--t-small); font-weight: 500; color: var(--ink); line-height: 1.4; text-shadow: 0 2px 16px rgb(var(--black) / 0.55); }
+.about-edu .detail { margin-top: 6px; font-size: var(--t-small); color: var(--ink-3); line-height: 1.5; text-shadow: 0 2px 16px rgb(var(--black) / 0.55); }
 
 /* contact */
 .contact h2 { font-size: var(--t-title); margin-inline: auto; max-width: 13ch; }
@@ -658,6 +703,8 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
 @media (max-width: 1023px) {
   .work-beat .copy { grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem); gap: var(--s-5) var(--s-6); }
   .beat--column { width: min(34rem, 52vw); }
+  .beat--about-lead { width: min(24rem, 44vw); }
+  .beat--about-edu { width: min(17rem, 32vw); }
 }
 
 /* phones (and the strip composition): every beat sits under the film strip */
@@ -670,13 +717,13 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
     --t-lead: 0.9375rem;
     --nav-h: 56px;
   }
-  .beat--lead, .beat--low-lead, .beat--band, .beat--column, .beat--centre {
+  .beat--lead, .beat--low-lead, .beat--band, .beat--column, .beat--centre, .beat--about-lead, .beat--about-edu {
     top: auto; left: var(--gutter); right: var(--gutter);
     bottom: calc(clamp(1.25rem, 4vh, 2.5rem) + var(--safe-b));
     width: auto; max-width: none; transform: none;
   }
   .beat--centre { text-align: left; }
-  .scrim--corner-lead, .scrim--corner-low-lead, .scrim--column, .scrim--centre, .scrim--band {
+  .scrim--corner-lead, .scrim--corner-low-lead, .scrim--column, .scrim--centre, .scrim--band, .scrim--about-lead, .scrim--about-edu {
     inset: -30vh -12vw -12vh -12vw;
     background: linear-gradient(to top, rgb(var(--film-ground) / 0.97) 0%, rgb(var(--film-ground) / 0.86) 36%, rgb(var(--film-ground) / 0.5) 66%, transparent 100%);
   }
@@ -695,11 +742,14 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   .exp-plane ul { gap: 8px; }
   .exp-plane li { font-size: 0.8125rem; }
   .exp-plane li:nth-child(n + 4) { display: none; }
-  .cap-grid { grid-template-columns: 1fr; gap: var(--s-4); }
-  .cap-items { margin-top: 4px; max-width: none; line-height: 1.6; font-size: 0.8125rem; }
-  .about-plane { padding: var(--s-4) var(--s-5); max-width: none; }
-  .about-plane p { font-size: 0.8125rem; }
-  .about-aside { margin-top: var(--s-4); }
+  .discipline { max-width: none; }
+  .discipline-n { font-size: clamp(1.9rem, 11vw, 2.75rem); }
+  .discipline-title { font-size: clamp(1.9rem, 11vw, 2.75rem); }
+  .discipline-blurb { margin-top: var(--s-4); margin-inline: 0; max-width: none; font-size: var(--t-body); }
+  .discipline-tags { margin-top: var(--s-3); }
+  .about-statement { max-width: none; }
+  .about-lede, .about-story { margin-top: var(--s-4); max-width: none; font-size: var(--t-body); }
+  .about-now { margin-top: var(--s-4); padding-top: var(--s-3); }
   .contact h2 { margin-inline: 0; }
   .contact-sub { margin-inline: 0; }
   .contact-socials { justify-content: flex-start; gap: 10px 20px; margin-top: var(--s-5); }

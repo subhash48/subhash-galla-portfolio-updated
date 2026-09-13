@@ -51,7 +51,7 @@ export const portfolio: Portfolio = {
     statementAccent: "",
     paragraphs: [
       "My work is about the opposite: systems that cite their sources, validate their own output, and get measured against a baseline before anyone calls them done.",
-      "I studied computer science with an AI specialization at the University of North Texas, graduating in 2026 on the President's List. Alongside the models I have shipped React Native apps on a Postgres and Prisma backend, mentored intro-CS students, and run stand-ups and retros for a small project team. I like the whole loop: the model, the service around it, and the interface a person actually touches.",
+      "Alongside the models, I've shipped React Native apps on a Postgres and Prisma backend, mentored intro-CS students, and run stand-ups and retros for a small project team. I like the whole loop: the model, the service around it, and the interface a person actually touches.",
     ],
     now: "Looking for a team building serious LLM or full-stack systems.",
   },
@@ -187,6 +187,27 @@ export const portfolio: Portfolio = {
         "PostgreSQL", "Prisma", "Vector search", "Data modeling", "Database design", "JSON",
         "AWS Bedrock", "Git", "GitHub", "VS Code", "Jupyter",
       ],
+    },
+  ],
+
+  whatIDo: [
+    {
+      title: ["AI Software", "Engineering"],
+      blurb:
+        "Retrieval pipelines, agentic planners and evaluation loops that connect language models to real data and real tools.",
+      tags: ["LLMs", "RAG", "LangChain", "Hugging Face", "Prompt engineering", "NLP"],
+    },
+    {
+      title: ["Software", "Engineering"],
+      blurb:
+        "Full-stack products end to end: React Native and TypeScript in front, REST APIs and a Postgres/Prisma data layer behind.",
+      tags: ["Python", "TypeScript", "React Native", "REST APIs", "SQL", "UI development"],
+    },
+    {
+      title: ["Cloud", "Engineering"],
+      blurb:
+        "The infrastructure behind the product: PostgreSQL and Prisma data layers, vector search, and AWS Bedrock for model access.",
+      tags: ["AWS Bedrock", "PostgreSQL", "Prisma", "Vector search", "Git", "GitHub"],
     },
   ],
 

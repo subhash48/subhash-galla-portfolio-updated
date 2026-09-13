@@ -14,7 +14,7 @@ export type ChapterId =
   | "identity"
   | "work"
   | "experience"
-  | "capabilities"
+  | "whatIDo"
   | "about"
   | "contact";
 
@@ -42,10 +42,13 @@ export type Window = readonly [from: number, to?: number, rampIn?: number, rampO
 export const FILM = {
   frames: 300,
   fps: 24,
-  size: { w: 1280, h: 720 },
+  size: { w: 1920, h: 1080 },
+  // Both device classes currently load the same lossless PNG sequence —
+  // maximum quality while the design is being judged (see scripts/build-film.mjs).
+  // A lighter mobile-specific encode is a follow-up once the look is locked.
   src: {
-    desktop: (i: number) => `/film/d/${String(i).padStart(3, "0")}.jpg`,
-    mobile: (i: number) => `/film/m/${String(i).padStart(3, "0")}.webp`,
+    desktop: (i: number) => `/scroll-frames/${String(i).padStart(3, "0")}.png`,
+    mobile: (i: number) => `/scroll-frames/${String(i).padStart(3, "0")}.png`,
   },
   /** one extra viewport so the last frame is a place the reader can rest */
   landing: 1,
@@ -76,7 +79,7 @@ export const FILM = {
     { id: "identity", label: "Identity", nav: false, frames: [40, 78], weight: 1.2, landing: 0.38 },
     { id: "work", label: "Work", nav: true, frames: [78, 196], weight: 4.8, landing: 0.1 },
     { id: "experience", label: "Experience", nav: true, frames: [196, 236], weight: 2.6, landing: 0.16 },
-    { id: "capabilities", label: "Capabilities", nav: false, frames: [236, 250], weight: 1.3, landing: 0.34 },
+    { id: "whatIDo", label: "What I Do", nav: true, frames: [236, 250], weight: 2.4, landing: 0.1 },
     { id: "about", label: "About", nav: true, frames: [250, 284], weight: 2.6, landing: 0.17 },
     { id: "contact", label: "Contact", nav: true, frames: [284, 300], weight: 1.4, landing: 0.5 },
   ] as readonly Chapter[],

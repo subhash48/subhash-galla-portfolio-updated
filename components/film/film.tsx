@@ -8,7 +8,7 @@ import {
   IdentityChapter,
   WorkChapter,
   ExperienceChapter,
-  CapabilitiesChapter,
+  WhatIDoChapter,
   AboutChapter,
   ContactChapter,
 } from "./chapters";
@@ -54,10 +54,10 @@ export function Film() {
           <img
             ref={posterRef}
             className="film-poster"
-            src="/film/d/001.jpg"
+            src="/scroll-frames/001.png"
             alt=""
-            width={1280}
-            height={720}
+            width={1920}
+            height={1080}
             fetchPriority="high"
             decoding="async"
           />
@@ -72,7 +72,7 @@ export function Film() {
           <IdentityChapter />
           <WorkChapter />
           <ExperienceChapter />
-          <CapabilitiesChapter />
+          <WhatIDoChapter />
           <AboutChapter />
           <ContactChapter />
         </div>

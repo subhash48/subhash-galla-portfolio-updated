@@ -77,6 +77,15 @@ export type CapabilityGroup = {
   items: string[];
 };
 
+export type Discipline = {
+  /** two-line display title, e.g. ["AI Software", "Engineering"] */
+  title: [string, string];
+  /** one sentence, grounded in real project/experience evidence */
+  blurb: string;
+  /** short capability row; every tag must exist verbatim in `capabilities` */
+  tags: string[];
+};
+
 export type Portfolio = {
   person: {
     name: string;
@@ -115,6 +124,7 @@ export type Portfolio = {
   experience: Role[];
   education: Education[];
   capabilities: CapabilityGroup[];
+  whatIDo: Discipline[];
   contact: {
     /** the oversized closing statement, one string per line */
     lines: string[];

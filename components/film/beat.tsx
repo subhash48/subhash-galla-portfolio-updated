@@ -21,9 +21,9 @@ export function Beat({
 }: {
   chapter: ChapterId;
   window: string;
-  anchor: "lead" | "low-lead" | "band" | "column" | "centre";
-  scrim: "corner-lead" | "corner-low-lead" | "band" | "column" | "centre" | "none";
-  device: "greet" | "lines" | "wipe" | "settle" | "stagger" | "focus" | "rise" | "finale";
+  anchor: "lead" | "low-lead" | "band" | "column" | "centre" | "about-lead" | "about-edu";
+  scrim: "corner-lead" | "corner-low-lead" | "band" | "column" | "centre" | "about-lead" | "about-edu" | "none";
+  device: "greet" | "lines" | "wipe" | "settle" | "discipline" | "focus" | "rise" | "finale";
   posterFrame: number;
   posterAlt?: string;
   className?: string;
@@ -40,10 +40,10 @@ export function Beat({
       {scrim !== "none" && <div className={cn("scrim", `scrim--${scrim}`)} aria-hidden />}
       <img
         className="poster"
-        src={`/film/d/${String(posterFrame).padStart(3, "0")}.jpg`}
+        src={`/scroll-frames/${String(posterFrame).padStart(3, "0")}.png`}
         alt={posterAlt}
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
         loading="lazy"
         decoding="async"
       />

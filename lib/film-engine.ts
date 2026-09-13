@@ -119,7 +119,10 @@ export class FilmEngine {
     this.miniCtx = this.mini.getContext("2d", { alpha: false })!;
     this.miniCtx.imageSmoothingEnabled = true;
     this.mobile = isMobile();
-    this.cacheCap = this.mobile ? 70 : 130;
+    // Frames are lossless 1920x1080 PNGs now (~8.3MB decoded each, vs ~3.7MB
+    // for the old 1280x720 JPEGs) — caps are scaled down ~2.25x so the
+    // decoded-bitmap budget in memory stays roughly where it was before.
+    this.cacheCap = this.mobile ? 32 : 60;
   }
 
   mount() {
@@ -316,8 +319,12 @@ export class FilmEngine {
     return null;
   }
 
-  /* ---------------- drawing ---------------- */
-
+  /* ---------------- drawing ----------------
+     Plain drawImage, no canvas filter: the source is now a lossless
+     1920x1080 PNG, so the sharp band should render as close to identical to
+     the source frame as cover-fit cropping allows — nothing here should push
+     it away from that. (A contrast/saturate "clarity" pass lived here while
+     the source was a compressed 1280x720 JPEG; it no longer applies.) */
   private draw(frame: number) {
     const idx = clamp(Math.round(frame), 1, FILM.frames);
     if (idx === this.lastDrawnFrame) return;

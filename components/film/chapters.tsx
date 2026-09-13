@@ -2,13 +2,14 @@ import Link from "next/link";
 import { ArrowUpRightIcon, GithubLogoIcon } from "@phosphor-icons/react/dist/ssr";
 import { portfolio } from "@/content/portfolio";
 import { diagrams } from "@/content/diagrams";
+import { FILM } from "@/content/film";
 import { pad } from "@/lib/utils";
 import { Beat } from "./beat";
 import { Glass } from "@/components/ui/glass";
 import { GlassReactive } from "@/components/ui/glass-reactive";
 import { SocialRow } from "@/components/ui/social-row";
 
-const { person, hero, work, experience, capabilities, about, contact, education } = portfolio;
+const { person, hero, work, experience, whatIDo, about, contact, education } = portfolio;
 
 function heroLine() {
   return hero.lines.map((l, i) => (
@@ -206,58 +207,77 @@ export function ExperienceChapter() {
 }
 
 /* ---------------------------------------------------------------- */
-/* 04 — Capabilities. The plainest chapter, deliberately: quiet      */
-/* before the close-up.                                              */
+/* 04 — What I do. Three disciplines, one at a time: each dominates  */
+/* the frame, then recedes as the next arrives. Same close-up range  */
+/* as before; the accent colour comes from whichever frame is live.  */
 /* ---------------------------------------------------------------- */
-export function CapabilitiesChapter() {
+const WHAT_I_DO_WINDOWS = ["0,0.4,0,0.22", "0.32,0.72,0.22,0.2", "0.62,1,0.22,0.16"] as const;
+const WHAT_I_DO_POSTERS = [238, 244, 249] as const;
+const WHAT_I_DO_ALTS = [
+  "Subhash Galla, close, cool cyan light crossing his face",
+  "Subhash Galla, close, blue light crossing his face",
+  "Subhash Galla, close, violet light crossing his face",
+] as const;
+
+export function WhatIDoChapter() {
   return (
-    <div id="capabilities" data-chapter="capabilities">
-      <Beat
-        chapter="capabilities"
-        window="0.06,1,0.3,0.18"
-        anchor="centre"
-        scrim="centre"
-        device="stagger"
-        posterFrame={242}
-        posterAlt="Subhash Galla, close, cyan and white light crossing his face"
-      >
-        <h2 className="sr-only">Capabilities</h2>
-        <div className="cap-grid">
-          {capabilities.map((g, i) => (
-            <div className="col" key={g.key} style={{ "--i": i } as React.CSSProperties}>
-              <h3 className="cap-head display">{g.label}</h3>
-              <p className="cap-items">
-                {g.items.map((item, j) => (
-                  <span key={item}>
-                    {j > 0 && <span className="sep"> · </span>}
-                    {item}
-                  </span>
-                ))}
-              </p>
-            </div>
-          ))}
-        </div>
-      </Beat>
+    <div id="whatIDo" data-chapter="whatIDo">
+      <h2 className="sr-only">What I do</h2>
+      {whatIDo.map((d, i) => (
+        <Beat
+          key={d.title.join(" ")}
+          chapter="whatIDo"
+          window={WHAT_I_DO_WINDOWS[i]}
+          anchor="centre"
+          scrim="centre"
+          device="discipline"
+          posterFrame={WHAT_I_DO_POSTERS[i]}
+          posterAlt={WHAT_I_DO_ALTS[i]}
+        >
+          <div className="discipline">
+            <span className="discipline-n tnum">{pad(i + 1)}</span>
+            <h3 className="discipline-title display">
+              <span className="line">{d.title[0]}</span>
+              <span className="line">{d.title[1]}</span>
+            </h3>
+            <p className="discipline-blurb">{d.blurb}</p>
+            <p className="discipline-tags label">
+              {d.tags.map((t, j) => (
+                <span key={t}>
+                  {j > 0 && <span className="sep"> · </span>}
+                  {t}
+                </span>
+              ))}
+            </p>
+          </div>
+        </Beat>
+      ))}
     </div>
   );
 }
 
 /* ---------------------------------------------------------------- */
-/* 05 — About. The peak: the close-up. A statement, then the story. */
+/* 06 — About. An editorial spread, not a card: the statement reveals */
+/* line by line, the story follows in the same left column, and      */
+/* education settles into the opposing negative space, right/lower.  */
 /* ---------------------------------------------------------------- */
+const ABOUT_POS = FILM.chapters.findIndex((c) => c.id === "about") + 1;
+const ABOUT_INDEX = `${pad(ABOUT_POS)} / ${pad(FILM.chapters.length)}`;
+
 export function AboutChapter() {
   return (
     <div id="about" data-chapter="about">
       <Beat
         chapter="about"
-        window="0,0.4,0,0.25"
-        anchor="centre"
-        scrim="centre"
+        window="0,0.36,0,0.2"
+        anchor="about-lead"
+        scrim="about-lead"
         device="focus"
         posterFrame={259}
         posterAlt="Close-up on Subhash Galla, pink and cyan light streaks crossing his face"
       >
         <div className="card">
+          <span className="about-index label">{ABOUT_INDEX} — About</span>
           <h2 className="about-statement display">
             {about.statement.map((l, i) => (
               <span className="line" key={i}>
@@ -265,31 +285,36 @@ export function AboutChapter() {
               </span>
             ))}
           </h2>
+          <p className="about-lede">{about.paragraphs[0]}</p>
         </div>
       </Beat>
       <Beat
         chapter="about"
-        window="0.36,1,0.22,0.16"
-        anchor="low-lead"
-        scrim="corner-low-lead"
+        window="0.3,0.72,0.22,0.16"
+        anchor="about-lead"
+        scrim="about-lead"
         device="rise"
-        posterFrame={275}
+        posterFrame={270}
         posterAlt="Subhash Galla, eyes closing in warm violet light"
       >
-        <Glass className="plane about-plane">
-          {about.paragraphs.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-          {about.now && <p className="about-now">{about.now}</p>}
-        </Glass>
-        <div className="aside about-aside">
+        <p className="about-story">{about.paragraphs[1]}</p>
+        {about.now && <p className="about-now">{about.now}</p>}
+      </Beat>
+      <Beat
+        chapter="about"
+        window="0.6,1,0.22,0.14"
+        anchor="about-edu"
+        scrim="about-edu"
+        device="rise"
+        posterFrame={280}
+        posterAlt="Subhash Galla, eyes closing in warm violet light"
+      >
+        <div className="about-edu">
           {education.map((e) => (
             <div key={e.institution}>
               <span className="label">{e.institution} · {e.period}</span>
-              <p>
-                <strong>{e.credential}</strong>
-                {e.detail ? ` — ${e.detail}` : ""}
-              </p>
+              <p className="credential">{e.credential}</p>
+              {e.detail && <p className="detail">{e.detail}</p>}
             </div>
           ))}
         </div>

@@ -17,6 +17,7 @@ export function Beat({
   posterFrame,
   posterAlt = "",
   className,
+  aside,
   children,
 }: {
   chapter: ChapterId;
@@ -27,6 +28,11 @@ export function Beat({
   posterFrame: number;
   posterAlt?: string;
   className?: string;
+  /** rendered as a sibling of .copy, not inside it — for a child that needs
+   * true viewport-fixed positioning. .copy carries its own transform on some
+   * devices (the exit drift), which would hijack position:fixed's containing
+   * block if nested inside it. */
+  aside?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
@@ -48,6 +54,7 @@ export function Beat({
         decoding="async"
       />
       <div className="copy">{children}</div>
+      {aside}
     </div>
   );
 }

@@ -33,12 +33,34 @@ export function IntroChapter() {
         device="greet"
         posterFrame={1}
         posterAlt="Subhash Galla, front-facing portrait in a blue and pink cinematic void"
+        aside={
+          <p className="greet-line intro-mantra label" style={{ "--i": 4 } as React.CSSProperties} aria-hidden>
+            Ideas <span className="arrow">→</span> Systems <span className="arrow">→</span> Impact
+          </p>
+        }
       >
-        <h1 className="greet-line" style={{ "--i": 0 } as React.CSSProperties}>
-          <span className="intro-name">{person.name}</span>
+        <div className="greet-line intro-kicker" style={{ "--i": 0 } as React.CSSProperties}>
+          <span className="intro-kicker-rule" aria-hidden />
+          <p className="label">
+            {person.focus.map((word) => (
+              <span key={word}>{word}</span>
+            ))}
+          </p>
+        </div>
+        <h1 className="greet-line intro-name-group" style={{ "--i": 1 } as React.CSSProperties}>
+          {person.name.split(" ").map((word) => (
+            <span className="intro-name" key={word}>
+              {word}
+            </span>
+          ))}
         </h1>
-        <p className="greet-line intro-role" style={{ "--i": 1 } as React.CSSProperties}>
+        <p className="greet-line intro-role" style={{ "--i": 2 } as React.CSSProperties}>
           {person.tagline}
+        </p>
+        <p className="greet-line intro-scroll label" style={{ "--i": 3 } as React.CSSProperties}>
+          <span className="intro-scroll-dot" aria-hidden />
+          Scroll to explore
+          <span className="intro-scroll-line" aria-hidden />
         </p>
       </Beat>
     </div>

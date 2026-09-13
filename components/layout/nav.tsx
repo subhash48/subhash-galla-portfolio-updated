@@ -46,7 +46,8 @@ export function Nav() {
   return (
     <header className="nav">
       <a href="#intro" onClick={(e) => go(e, "intro")} className="nav-name" aria-label={`${person.name}, back to the top`}>
-        {monogram}
+        <span>{monogram}</span>
+        <span className="nav-name-rule" aria-hidden />
       </a>
 
       <ul className="nav-links" aria-label="Chapters">

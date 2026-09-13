@@ -581,10 +581,17 @@ input, textarea { caret-color: var(--accent); }
 /* a quiet editorial signature, not a logo mark: plain typography, no
    enclosing shape, a hair of tracking instead of weight to read as a mark */
 .nav-name {
+  display: inline-flex; align-items: center; gap: 12px;
   font-size: 0.875rem; font-weight: 500; color: var(--ink-3); letter-spacing: 0.03em;
   transition: color var(--dur-ui) var(--ease-out);
 }
 .nav-name:hover { color: var(--ink); }
+.nav-name-rule {
+  width: 44px; height: 1px; background: currentColor; opacity: 0.4;
+  transform: scaleX(0.727); transform-origin: 0 50%;
+  transition: transform var(--dur-ui) var(--ease-out), opacity var(--dur-ui) var(--ease-out);
+}
+.nav-name:hover .nav-name-rule { transform: scaleX(1); opacity: 0.6; }
 .nav-links { display: flex; gap: 2px; margin: 0; padding: 0; list-style: none; }
 .nav-link {
   display: inline-flex; align-items: center; gap: 8px;
@@ -649,6 +656,12 @@ input, textarea { caret-color: var(--accent); }
   box-shadow: 0 0 12px rgb(var(--film-accent) / 0.5);
   will-change: transform;
 }
+.rail-index {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  color: rgb(var(--ivory) / 0.4);
+}
+.rail-index--start { bottom: calc(100% + 14px); }
+.rail-index--end { top: calc(100% + 14px); }
 @media (max-width: 899px) { .rail { display: none; } }
 
 html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
@@ -658,22 +671,68 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
    ================================================================ */
 
 /* intro: the identity anchor — a calm, editorial title card, not a bold
-   website heading. Composes the site's own display voice (.display /
-   .display--sentence — the sentence-case variant every other title card
-   skips) instead of a bespoke weight, so the name reads as the same
-   typographic family as Work, Experience, and About, not a stray H1. */
+   website heading. Kicker names the three real pillars against a thin rule
+   (mono, the same .label voice as every index/metadata mark on the site);
+   name is two stacked words at --t-title (Identity/Contact's own scale, not
+   a bespoke size), graded top-to-bottom into the live film-ambient tone so
+   it reads as lit by the same source as the frame, not a flat sticker on
+   top of it; role stays the supporting paragraph; scroll cue and the
+   bottom-right mantra close the block in the same quiet mono voice as the
+   kicker, never a separate UI language. */
+.intro-kicker { display: flex; align-items: stretch; gap: 14px; margin-bottom: 20px; }
+.intro-kicker-rule { flex-shrink: 0; width: 1px; background: rgb(var(--ivory) / 0.22); }
+.intro-kicker .label { display: flex; flex-direction: column; gap: 3px; }
+.intro-name-group {
+  background: linear-gradient(180deg, var(--ink) 0%, var(--ink) 42%, rgb(var(--film-avg) / 0.92) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
 .intro-name {
-  display: block; font-size: clamp(2.75rem, 1.5rem + 1.7vw, 3.25rem); /* 44–52px */
+  display: block; font-size: var(--t-title);
   font-family: var(--font-display); font-weight: 600; font-variation-settings: "wdth" 104;
-  line-height: 1.02; letter-spacing: -0.02em; text-transform: none;
-  color: var(--ink);
-  text-shadow: 0 1px 16px rgb(var(--black) / 0.12);
+  line-height: 0.98; letter-spacing: -0.02em; text-transform: none;
+  text-shadow: 0 2px 24px rgb(var(--black) / 0.16);
 }
 .intro-role {
-  display: block; margin-top: 18px; max-width: min(560px, 90vw);
+  display: block; margin-top: 22px; max-width: min(560px, 90vw);
   font-size: clamp(1.0625rem, 0.95rem + 0.3vw, 1.1875rem); /* 17–19px */
   font-weight: 400; line-height: 1.62; color: rgb(var(--ivory) / 0.78);
 }
+.intro-scroll {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 32px; color: rgb(var(--ivory) / 0.45);
+}
+.intro-scroll-dot {
+  position: relative; flex-shrink: 0; width: 15px; height: 15px; border-radius: 50%;
+  border: 1px solid rgb(var(--ivory) / 0.35);
+}
+.intro-scroll-dot::after {
+  content: ""; position: absolute; inset: 4px; border-radius: 50%; background: rgb(var(--ivory) / 0.7);
+}
+.intro-scroll-line {
+  position: relative; width: 44px; height: 1px; overflow: hidden;
+  background: rgb(var(--ivory) / 0.2);
+}
+.intro-scroll-line::after {
+  content: ""; position: absolute; inset: 0;
+  background: var(--ink);
+  animation: intro-scroll-sweep 2.6s var(--ease-out) infinite;
+}
+@keyframes intro-scroll-sweep {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+/* fixed to the viewport (not the small lead column): .film-copy is the
+   nearest ancestor with a transform, so it — not .beat — is this
+   position:fixed element's containing block, giving a true bottom-right
+   placement for free. Opacity still rides .beat's own --w since fixed
+   positioning changes layout, not the paint/opacity stacking context. */
+.intro-mantra {
+  position: fixed; right: var(--gutter); bottom: clamp(2rem, 6vh, 3.5rem);
+  color: rgb(var(--ivory) / 0.4);
+}
+.intro-mantra .arrow { margin-inline: 2px; color: rgb(var(--ivory) / 0.3); }
+@media (max-width: 899px) { .intro-mantra { display: none; } }
 
 /* identity */
 .identity h1 { font-size: var(--t-title); max-width: 12ch; }
@@ -814,7 +873,7 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   .beat--column { width: min(34rem, 52vw); }
   .beat--about-lead { width: min(24rem, 44vw); }
   .beat--about-edu { width: min(23rem, 46vw); }
-  .intro-name { font-size: clamp(2rem, 4vw, 2.5rem); } /* 32–40px */
+  .intro-name { font-size: clamp(2.5rem, 5.2vw, 3.25rem); } /* 40–52px */
   .intro-role { font-size: clamp(0.9375rem, 1.8vw, 1.0625rem); } /* 15–17px */
 }
 
@@ -840,6 +899,11 @@ html[data-cursor="on"], html[data-cursor="on"] * { cursor: none !important; }
   }
   .beat--lead { bottom: auto; top: calc(var(--nav-h) + 4px); }
   .scrim--corner-lead { inset: -20vh -12vw -12vh -12vw; background: linear-gradient(to bottom, rgb(var(--film-ground) / 0.9), rgb(var(--film-ground) / 0.55) 55%, transparent 100%); }
+  /* the kicker and scroll cue are bonus editorial marks, not core identity —
+     cut first under the height pressure of a stacked phone layout so the
+     block never pushes down into the face. Name, role, SG, and nav are the
+     preserved minimum. */
+  .intro-kicker, .intro-scroll { display: none; }
   .intro-name { font-size: clamp(1.75rem, 7vw, 2.125rem); } /* 28–34px */
   .intro-role { font-size: clamp(0.9375rem, 4vw, 1rem); } /* 15–16px */
   .identity h1 { max-width: none; }

@@ -101,6 +101,8 @@ export type Portfolio = {
     role: string;
     /** 2-3 line intro under the name in the hero identity block */
     tagline: string;
+    /** 3 short domain words, hero kicker above the name — drawn from tagline's own pillars, never invented marketing copy */
+    focus: [string, string, string];
     /** the 1-2 sentence positioning, first person, confident, concrete */
     statement: string;
     location?: string;

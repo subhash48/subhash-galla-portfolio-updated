@@ -2,6 +2,7 @@
 
 import { FILM, FILM_TOTAL, CHAPTER_START, type ChapterId } from "@/content/film";
 import { scrollToChapter } from "@/lib/film-nav";
+import { pad } from "@/lib/utils";
 
 /**
  * The restrained scroll indicator: a fine vertical line, a tick per chapter,
@@ -12,6 +13,9 @@ import { scrollToChapter } from "@/lib/film-nav";
 export function Rail() {
   return (
     <nav className="rail" aria-label="Film progress">
+      <span className="rail-index rail-index--start label" aria-hidden>
+        {pad(1)}
+      </span>
       <div className="rail-marker" aria-hidden />
       {FILM.chapters.map((c) => (
         <button
@@ -24,6 +28,9 @@ export function Rail() {
           onClick={() => scrollToChapter(c.id as ChapterId)}
         />
       ))}
+      <span className="rail-index rail-index--end label" aria-hidden>
+        {pad(FILM.chapters.length)}
+      </span>
     </nav>
   );
 }
